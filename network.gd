@@ -7,6 +7,8 @@ var server_info = {
 }
 
 signal server_created   # when server is successfully created
+signal join_success     # When the peer successfully joins a server
+signal join_fail        # Failed to join a server
 
 func _ready():
 	get_tree().connect("network_peer_connected", self, "_on_player_connected")
@@ -25,11 +27,12 @@ func _on_player_disconnected(id):
 
 # Peer trying to connect to server is notified on success
 func _on_connected_to_server():
-	pass
+	emit_signal("join_success")
 
 # Peer trying to connect to server is notified on failure
 func _on_connection_failed():
-	pass
+	emit_signal("join_fail")
+	get_tree().set_network_peer(null)
 
 # Peer is notified when disconnected from server
 func _on_disconnected_from_server():
@@ -50,6 +53,14 @@ func create_server():
 	# Tell the server has been created successfully
 	emit_signal("server_created")
 
-
+func join_server(ip, port):
+	var net = NetworkedMultiplayerENet.new()
+	
+	if (net.create_client(ip, port) != OK):
+		print("Failed to create client")
+		emit_signal("join_fail")
+		return
+	
+	get_tree().set_network_peer(net)
 
 

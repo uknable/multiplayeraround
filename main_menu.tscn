@@ -69,7 +69,6 @@ margin_bottom = 180.0
 text = "Create"
 
 [node name="PanelJoin" type="Panel" parent="."]
-editor/display_folded = true
 margin_top = 360.0
 margin_right = 290.0
 margin_bottom = 550.0
@@ -159,3 +158,4 @@ margin_right = 147.0
 margin_bottom = 135.0
 text = "Default"
 [connection signal="pressed" from="PanelHost/btCreate" to="." method="_on_btCreate_pressed"]
+[connection signal="pressed" from="PanelJoin/btJoin" to="." method="_on_btJoin_pressed"]
