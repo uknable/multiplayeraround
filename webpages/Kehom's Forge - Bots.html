@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://kehomsforge.com/tutorials/multi/gdMultiplayerSetup/part04/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   
+   <title>Kehom's Forge - Bots</title>
+
+   <link rel="stylesheet" type="text/css" href="./Kehom&#39;s Forge - Bots_files/main.css">
+   <link rel="stylesheet" type="text/css" href="./Kehom&#39;s Forge - Bots_files/prism.css">
+   <link rel="stylesheet" type="text/css" href="./Kehom&#39;s Forge - Bots_files/katex.min.css">
+   <script src="./Kehom&#39;s Forge - Bots_files/jquery-3.3.1.min.js.download"></script>
+   <script src="./Kehom&#39;s Forge - Bots_files/progress_bar.js.download"></script>
+   <script src="./Kehom&#39;s Forge - Bots_files/audio_player.js.download"></script>
+   <script src="./Kehom&#39;s Forge - Bots_files/main.js.download"></script></head>
+<body>
+
+<div class="page-container">
+
+   <div class="header">
+      <a href="http://kehomsforge.com/"><img src="./Kehom&#39;s Forge - Bots_files/title_anvil.png" style="margin: 0; padding: 0"><img src="./Kehom&#39;s Forge - Bots_files/title.png" style="margin: 0; padding: 0"></a>
+   </div>
+
+   <div class="col-container clearfix">
+      <div class="column sidebar sidenav">
+         <a href="http://kehomsforge.com/" class="">Home</a>
+         <a href="http://kehomsforge.com/tutorials" class="active">Tutorials</a>
+         <a href="http://kehomsforge.com/blog/1/" class="">Blog</a>
+         <a href="http://kehomsforge.com/news/1/" class="">News</a>
+         <a href="http://kehomsforge.com/contact" class="">Contact</a>
+         <a href="http://kehomsforge.com/about" class="">About</a>
+         <hr>
+      
+         <button class="acc_button">
+            <img src="./Kehom&#39;s Forge - Bots_files/feed-icon.svg" style="width: 16px; height: 16px; vertical-align: middle;" onerror="this.src=\" feed-icon.png\';'="">
+            <span style="">RSS</span>
+         </button>
+         <div class="acc_panel">
+            <a href="http://kehomsforge.com/newsfeed.xml">News</a>
+            <a href="http://kehomsforge.com/blogfeed.xml">Blog</a>
+            <a href="http://kehomsforge.com/allfeed.xml">News + Blog</a>
+         </div>
+      
+      
+      </div>
+      
+
+      <div class="column content">
+         
+         <h2>Part 4 - “Bots”</h2>
+<p>We now have a synchronized game world, with the possibility of multiple players joining the a server and each one controlling it’s own avatar. A HUD displays the list of connected players and not only that list is updated when someone connects/disconnects, the amount of player avatars is also kept in sync. The tutorial could have been considered completed, but then there came the desire to add a few “bots” into the game world in order to fill the maximum amount of players.</p>
+<p>Now, by bot I mean they will move without any player’s interaction. But in order to avoid too much complication, we will deal only with “random movements”. By that I mean, when a bot is spawned we will get a random spot within the game window and make the bot move into that place. Once there, we calculate another point and repeat.</p>
+<h3>The Scene</h3>
+<p>First, let’s begin by creating the bot scene. In other words, create a new scene choosing <code class="">Node2D</code> as it’s root and name it <code class="">BotRoot</code>. As with the player scene, drag in the default Godot’s icon into the top left corner and make sure the <code class="">transform-&gt;position</code> of the created sprite node is <code class="">x = 0, y = 0</code>. Repeat the scaling, setting <code class="">x = 0.6, y = 0.6</code> so it doesn’t get too big within the world. In order to bring some difference between the bots and the players, change the <code class="">Material</code> property to <code class="">CanvasItemMaterial</code> then expand it and change the <code class="">BlendMode</code> from <code class="">Mix</code> to <code class="">Add</code>. Save the scene naming it <code class="">bot.tscn</code>.</p>
+<h3>Bot Script</h3>
+<p>Attach a new script into the <code class="">BotRoot</code> node, naming the file <code class="">bot.gd</code>. It should contain a single line, <code class="">extends Node2D</code>. We will begin the script by declaring a few variables:</p>
+<ul>
+<li>speed_range → This is a vector that will hold the minimum (x) and maximum (y) possible values for the movement speed. When performing the movement, we will randomly get a value between these two.</li>
+<li>dest_location → Another vector, that will hold the destination spot. We will use that for the movement.</li>
+<li>start_pos → We will perform the movement through the use of linear interpolation. For that to work we need to keep track of the initial position.</li>
+<li>count_time → This will be total amount of time that we have to count when performing the movement. In a way, this holds how much time is necessary to move the bot from <code class="">start_pos</code> to <code class="">dest_location</code>.</li>
+<li>current_time → And we keep track of the amount of elapsed time. This will be used to calculate the alpha in the linear interpolation.</li>
+</ul>
+<p>After those, we declare the values that must be replicated, position and rotation. Wait, “rotation” you say? Yes, indeed. In this case we will rotate the bot’s icon to somewhat point in the direction they are moving to. We could hve done the rotation with the player avatars too. That’s relatively easy and is left as an exercise to you, dear reader! Anyway, the declaration of the variables:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">bot.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">const speed_range <span class="token operator">=</span> Vector2<span class="token punctuation">(</span><span class="token number">150</span><span class="token punctuation">,</span> <span class="token number">300</span><span class="token punctuation">)</span>
+var dest_location <span class="token operator">=</span> Vector2<span class="token punctuation">(</span><span class="token punctuation">)</span>
+var start_pos <span class="token operator">=</span> Vector2<span class="token punctuation">(</span><span class="token punctuation">)</span>
+var count_time <span class="token operator">=</span> <span class="token number">0</span>
+var current_time <span class="token operator">=</span> <span class="token number">0</span>
+
+<span class="token comment"># Replicated data</span>
+slave var repl_position <span class="token operator">=</span> Vector2<span class="token punctuation">(</span><span class="token punctuation">)</span>
+slave var repl_rotation <span class="token operator">=</span> <span class="token number">0.0</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</div>
+<h3>Random Spot</h3>
+<p>The very first function that we will implement is one meant to get a random spot within the game world. Instead of caching the screen size, like many do, we will always obtain those values when calculating the random spot because the screen size may change through a window resize. Of course we could deal with this event, but then, let’s keep focus on the multiplayer aspect, shall we? All this function will do is calculate a random point (X, Y) as long as <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle mathsize="0.7em"><mn>0</mn><mo>⩽</mo><mi>x</mi><mo>⩽</mo><mi>S</mi><mi>c</mi><mi>r</mi><mi>e</mi><mi>e</mi><mi>n</mi><mi>W</mi><mi>i</mi><mi>d</mi><mi>t</mi><mi>h</mi></mstyle></mrow><annotation encoding="application/x-tex">\scriptsize 0 \leqslant x \leqslant ScreenWidth</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.546777em;vertical-align:-0.095669em;"></span><span class="mord sizing reset-size6 size3">0</span><span class="mspace" style="margin-right:0.3252777777777778em;"></span><span class="mrel amsrm sizing reset-size6 size3">⩽</span><span class="mspace" style="margin-right:0.3252777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.5413379999999999em;vertical-align:-0.095669em;"></span><span class="mord mathdefault sizing reset-size6 size3">x</span><span class="mspace" style="margin-right:0.3252777777777778em;"></span><span class="mrel amsrm sizing reset-size6 size3">⩽</span><span class="mspace" style="margin-right:0.3252777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.48610799999999993em;vertical-align:0em;"></span><span class="mord mathdefault sizing reset-size6 size3" style="margin-right:0.05764em;">S</span><span class="mord mathdefault sizing reset-size6 size3">c</span><span class="mord mathdefault sizing reset-size6 size3" style="margin-right:0.02778em;">r</span><span class="mord mathdefault sizing reset-size6 size3">e</span><span class="mord mathdefault sizing reset-size6 size3">e</span><span class="mord mathdefault sizing reset-size6 size3">n</span><span class="mord mathdefault sizing reset-size6 size3" style="margin-right:0.13889em;">W</span><span class="mord mathdefault sizing reset-size6 size3">i</span><span class="mord mathdefault sizing reset-size6 size3">d</span><span class="mord mathdefault sizing reset-size6 size3">t</span><span class="mord mathdefault sizing reset-size6 size3">h</span></span></span></span> and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle mathsize="0.7em"><mn>0</mn><mo>⩽</mo><mi>Y</mi><mo>⩽</mo><mi>S</mi><mi>c</mi><mi>r</mi><mi>e</mi><mi>e</mi><mi>n</mi><mi>H</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi></mstyle></mrow><annotation encoding="application/x-tex">\scriptsize 0 \leqslant Y \leqslant ScreenHeight</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.546777em;vertical-align:-0.095669em;"></span><span class="mord sizing reset-size6 size3">0</span><span class="mspace" style="margin-right:0.3252777777777778em;"></span><span class="mrel amsrm sizing reset-size6 size3">⩽</span><span class="mspace" style="margin-right:0.3252777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.574em;vertical-align:-0.095669em;"></span><span class="mord mathdefault sizing reset-size6 size3" style="margin-right:0.22222em;">Y</span><span class="mspace" style="margin-right:0.3252777777777778em;"></span><span class="mrel amsrm sizing reset-size6 size3">⩽</span><span class="mspace" style="margin-right:0.3252777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.6222159999999999em;vertical-align:-0.13610799999999998em;"></span><span class="mord mathdefault sizing reset-size6 size3" style="margin-right:0.05764em;">S</span><span class="mord mathdefault sizing reset-size6 size3">c</span><span class="mord mathdefault sizing reset-size6 size3" style="margin-right:0.02778em;">r</span><span class="mord mathdefault sizing reset-size6 size3">e</span><span class="mord mathdefault sizing reset-size6 size3">e</span><span class="mord mathdefault sizing reset-size6 size3">n</span><span class="mord mathdefault sizing reset-size6 size3" style="margin-right:0.08125em;">H</span><span class="mord mathdefault sizing reset-size6 size3">e</span><span class="mord mathdefault sizing reset-size6 size3">i</span><span class="mord mathdefault sizing reset-size6 size3" style="margin-right:0.03588em;">g</span><span class="mord mathdefault sizing reset-size6 size3">h</span><span class="mord mathdefault sizing reset-size6 size3">t</span></span></span></span>. We can easily obtain the screen dimensions by <code class="">get_viewport_rect().size</code>. With that in mind, the code:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">bot.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">func get_random_location<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	var limits <span class="token operator">=</span> get_viewport_rect<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>size
+	<span class="token keyword">return</span> Vector2<span class="token punctuation">(</span>rand_range<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> limits<span class="token punctuation">.</span>x<span class="token punctuation">)</span><span class="token punctuation">,</span> rand_range<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> limits<span class="token punctuation">.</span>y<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span></span></code></pre>
+</div>
+<h3>Motion Variables</h3>
+<p>Next we need to calculate the motion variables. Since we will have to do that once in the initialization and then every time the bot reaches the destination, we create a function to perform this task. In this function we obtain the <code class="">dest_location</code> simply by calling the <code class="">get_random_location()</code> we just implemented. Then we have to calculate the total amount of time necessary to perform the movement. This will be done by calculating the distance from current position to the destination and dividing that by the movement speed, which will be a random value between <code class="">speed_range.x</code> and <code class="">speed_range.y</code>. We then reset the current counting time and the starting reference position. Next we calculate the rotation angle and then apply that angle, keeping in mind that if the destination is directly up, the icon would point to the right, so we have to add a quarter circle (<em>Pi/2</em>) to the resulting angle:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerlbock">
+<p><code class="">bot.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">func calculate_motion_vars<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	dest_location <span class="token operator">=</span> get_random_location<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	count_time <span class="token operator">=</span> position<span class="token punctuation">.</span>distance_to<span class="token punctuation">(</span>dest_location<span class="token punctuation">)</span> <span class="token operator">/</span> rand_range<span class="token punctuation">(</span>speed_range<span class="token punctuation">.</span>x<span class="token punctuation">,</span> speed_range<span class="token punctuation">.</span>y<span class="token punctuation">)</span>
+	current_time <span class="token operator">=</span> <span class="token number">0</span>
+	start_pos <span class="token operator">=</span> position
+	var angle <span class="token operator">=</span> get_angle_to<span class="token punctuation">(</span>dest_location<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token punctuation">(</span>PI<span class="token operator">/</span><span class="token number">2</span><span class="token punctuation">)</span>   <span class="token comment"># Angle is in radians</span>
+	rotate<span class="token punctuation">(</span>angle<span class="token punctuation">)</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</div>
+<h3>Bot Initialization</h3>
+<p>Now we deal with the initialization of the bot, by implementing the <code class="">_ready()</code> function. In there all we do is calculate a random modulation color, a random position and then calculate the motion variables:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">bot.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">func _ready<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token comment"># Calculate a random modulation color - randf() gives a random number in the interval [0,1]</span>
+	$icon<span class="token punctuation">.</span>modulate <span class="token operator">=</span> Color<span class="token punctuation">(</span>randf<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> randf<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> randf<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+	<span class="token comment"># And a random position - ideally this initial position should be placed on the spawn code</span>
+	<span class="token comment"># however simplicity is required for the tutorial</span>
+	position <span class="token operator">=</span> get_random_location<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token comment"># And the motion variables</span>
+	calculate_motion_vars<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</div>
+<h3>The Motion</h3>
+<p>Finally we can deal with the bot motion. This is done from the <code class="">_process()</code> function. In there we will only perform the calculation if in the server, which indirectly means that the bot is in it’s network master. The logic consists in updating the <code class="">current_time</code> variable and then calculating the alpha, which is merely a percent value towards the total amount of time that must be spent. If this alpha goes beyond 1, we then “normalize” it back to 1 (which means 100%) so the motion doesn’t overshoot. Then we calculate the new bot position through a linear interpolation between the starting position and the destination position. After this calculation, we check again the value of the alpha. And if <code class="">1</code> we have to calculate new motion variables. Finally we apply the new position and replicate both position and rotation:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">bot.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">func _process<span class="token punctuation">(</span>delta<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>is_network_master<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+		current_time <span class="token operator">+=</span> delta
+		var alpha <span class="token operator">=</span> current_time <span class="token operator">/</span> count_time
+		<span class="token keyword">if</span> <span class="token punctuation">(</span>alpha <span class="token operator">&gt;</span> <span class="token number">1.0</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+			alpha <span class="token operator">=</span> <span class="token number">1.0</span>
+		
+		var nposition <span class="token operator">=</span> start_pos<span class="token punctuation">.</span>linear_interpolate<span class="token punctuation">(</span>dest_location<span class="token punctuation">,</span> alpha<span class="token punctuation">)</span>
+		
+		<span class="token keyword">if</span> <span class="token punctuation">(</span>alpha <span class="token operator">&gt;=</span> <span class="token number">1.0</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+			calculate_motion_vars<span class="token punctuation">(</span><span class="token punctuation">)</span>
+		
+		position <span class="token operator">=</span> nposition
+		
+		<span class="token comment"># Replicate values</span>
+		rset<span class="token punctuation">(</span><span class="token string">"repl_position"</span><span class="token punctuation">,</span> position<span class="token punctuation">)</span>
+		rset<span class="token punctuation">(</span><span class="token string">"repl_rotation"</span><span class="token punctuation">,</span> rotation<span class="token punctuation">)</span>
+	<span class="token keyword">else</span><span class="token punctuation">:</span>
+		position <span class="token operator">=</span> repl_position
+		rotation <span class="token operator">=</span> repl_rotation
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</div>
+<p>If you want to test the bot movement before dealing with the spawning code, open the game world scene and add an instance (or more) into the “level”. Then test the game. Once done, delete the instances since we will dynamically spawn them.</p>
+<h3>Initializing the Random</h3>
+<p>We have used quite a bit of random values within this part up to this point. The problem is that we haven’t initialized the random number generation system! Because of that, every time we open the game we will have the exact same sequence of values being generated. So solve this, we have to call the <code class="">randomize()</code> function once in the game life time. But where, exactly? Well, we can use the <code class="">gamestate.gd</code> in it’s initialization, <code class="">_ready()</code> function. So, let’s do that:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">gamestate.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">func _ready<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	randomize<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span></span></code></pre>
+</div>
+<h3>Spawning the Bots</h3>
+<p>The way we will do this follows. We create a new remote function named <code class="">sync_bots()</code> which will tell how many bots must be in the game world. This function should always be called from the server, which will then calculate the amount of bots and then spread the value across the connected players. Once in the “general execution code”, we compare the internal amount of bots with argument value. If the internal amount is bigger, then we have to remove bots from the scene. If the internal amount is smaller, then we have to spawn bots. The way to create and remove scene actors from the game world has already been seen, so I will not detail that part of the code. Anyway, we need to keep track of the amount of spawned bots within each connected player. For that we create a new variable in the <code class="">gamestate.gd</code> named <code class="">spawned_bots</code>. We will also need some information regarding the spawned bots so we can remove them later. For that we add a <code class="">bot_info</code> dictionary:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">gamestate.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">var spawned_bots <span class="token operator">=</span> <span class="token number">0</span>
+var bot_info <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span></span></code></pre>
+</div>
+<p>As with the <code class="">player_info</code>, we will take advantage of the possibilities given by the dictionary and use one of the fields to provide the information pointing to the scene that will be used as instance when spawning the bot. While in this tutorial we only have one scene, this is meant to show about the possibility. Anyway, we will initialize this dictionary with 15 entries, which would allow us to spawn up to 15 bots. Adding this to the always necessary server’s player, we get the total amount of 16 “players”. Keep in mind that we will keep things very simple and won’t randomly choose bots from this list, but rather add/remove as a “moving index” pointing to the entries in the dictionary. That said, let’s initialize the bot list:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">gamestate.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">func _ready<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	randomize<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	
+	<span class="token comment"># Initialize the bot list</span>
+	<span class="token keyword">for</span> <span class="token builtin">id</span> <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+		bot_info<span class="token punctuation">[</span><span class="token builtin">id</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">{</span> name <span class="token operator">=</span> <span class="token string">"Bot_"</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span><span class="token builtin">id</span><span class="token punctuation">)</span><span class="token punctuation">,</span> actor_path <span class="token operator">=</span> <span class="token string">"res://bot.tscn"</span> <span class="token punctuation">}</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</div>
+<p>Then we can work on the <code class="">sync_bots()</code> function:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">game_world.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">remote func sync_bots<span class="token punctuation">(</span>bot_count<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>get_tree<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>is_network_server<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+		<span class="token comment"># Calculate the target amount of spawned bots</span>
+		bot_count <span class="token operator">=</span> network<span class="token punctuation">.</span>server_info<span class="token punctuation">.</span>max_players <span class="token operator">-</span> network<span class="token punctuation">.</span>players<span class="token punctuation">.</span>size<span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token comment"># Relay this to the connected players</span>
+		rpc<span class="token punctuation">(</span><span class="token string">"sync_bots"</span><span class="token punctuation">,</span> bot_count<span class="token punctuation">)</span>
+	
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>gamestate<span class="token punctuation">.</span>spawned_bots <span class="token operator">&gt;</span> bot_count<span class="token punctuation">)</span><span class="token punctuation">:</span>
+		<span class="token comment"># We have more bots than the target count - must remove some</span>
+		<span class="token keyword">while</span> <span class="token punctuation">(</span>gamestate<span class="token punctuation">.</span>spawned_bots <span class="token operator">&gt;</span> bot_count<span class="token punctuation">)</span><span class="token punctuation">:</span>
+			<span class="token comment"># Locate the bot's node</span>
+			var bnode <span class="token operator">=</span> get_node<span class="token punctuation">(</span>gamestate<span class="token punctuation">.</span>bot_info<span class="token punctuation">[</span>gamestate<span class="token punctuation">.</span>spawned_bots<span class="token punctuation">]</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span>
+			<span class="token keyword">if</span> <span class="token punctuation">(</span>!bnode<span class="token punctuation">)</span><span class="token punctuation">:</span>
+				<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Must remove bots from game but cannot find it's node"</span><span class="token punctuation">)</span>
+				<span class="token keyword">return</span>
+			<span class="token comment"># Mark it for removal</span>
+			bnode<span class="token punctuation">.</span>queue_free<span class="token punctuation">(</span><span class="token punctuation">)</span>
+			<span class="token comment"># And update the spawned bot count</span>
+			gamestate<span class="token punctuation">.</span>spawned_bots <span class="token operator">-=</span> <span class="token number">1</span>
+	
+	<span class="token keyword">elif</span> <span class="token punctuation">(</span>gamestate<span class="token punctuation">.</span>spawned_bots <span class="token operator">&lt;</span> bot_count<span class="token punctuation">)</span><span class="token punctuation">:</span>
+		<span class="token comment"># We have less bots than the target count - must add some</span>
+		<span class="token comment"># Since every single bot uses the exact same scene path we can cahce it's loaded scene here</span>
+		<span class="token comment"># otherwise, we would have to move the following code into the while loop and change the dictionary</span>
+		<span class="token comment"># key ID to point into the correct bot info. In this case we are pointing to the 1</span>
+		var bot_class <span class="token operator">=</span> load<span class="token punctuation">(</span>gamestate<span class="token punctuation">.</span>bot_info<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>actor_path<span class="token punctuation">)</span>
+		
+		<span class="token keyword">while</span> <span class="token punctuation">(</span>gamestate<span class="token punctuation">.</span>spawned_bots <span class="token operator">&lt;</span> bot_count<span class="token punctuation">)</span><span class="token punctuation">:</span>
+			var nbot <span class="token operator">=</span> bot_class<span class="token punctuation">.</span>instance<span class="token punctuation">(</span><span class="token punctuation">)</span>
+			nbot<span class="token punctuation">.</span>set_name<span class="token punctuation">(</span>gamestate<span class="token punctuation">.</span>bot_info<span class="token punctuation">[</span>gamestate<span class="token punctuation">.</span>spawned_bots<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span>
+			add_child<span class="token punctuation">(</span>nbot<span class="token punctuation">)</span>
+			gamestate<span class="token punctuation">.</span>spawned_bots <span class="token operator">+=</span> <span class="token number">1</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</div>
+<p>The last thing we have to do now is call this function. We do this from two different events. Once a player connects and then when someone leaves. To make things simple and be sure the game world is loaded on the client when it joins the server, from the <code class="">game_world.gd</code> initialization function we check if we are on the server. If so, we directly call this function. Otherwise, we request a remote procedure call directly to the server, which will then broadcast this into the players:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">game_world.tscn</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">func _ready<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token comment"># Connect event handler to the player_list_changed signal</span>
+	network<span class="token punctuation">.</span>connect<span class="token punctuation">(</span><span class="token string">"player_list_changed"</span><span class="token punctuation">,</span> self<span class="token punctuation">,</span> <span class="token string">"_on_player_list_changed"</span><span class="token punctuation">)</span>
+	<span class="token comment"># If we are in the server, connect to the event that will deal with player despawning</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>get_tree<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>is_network_server<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+		network<span class="token punctuation">.</span>connect<span class="token punctuation">(</span><span class="token string">"player_removed"</span><span class="token punctuation">,</span> self<span class="token punctuation">,</span> <span class="token string">"_on_player_removed"</span><span class="token punctuation">)</span>
+	
+	<span class="token comment"># Update the lblLocalPlayer label widget to display the local player name</span>
+	$HUD<span class="token operator">/</span>PanelPlayerList<span class="token operator">/</span>lblLocalPlayer<span class="token punctuation">.</span>text <span class="token operator">=</span> gamestate<span class="token punctuation">.</span>player_info<span class="token punctuation">.</span>name
+	
+	<span class="token comment"># Spawn the players</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>get_tree<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>is_network_server<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+		spawn_players<span class="token punctuation">(</span>gamestate<span class="token punctuation">.</span>player_info<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+		sync_bots<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>    <span class="token comment"># The amount doesn't matter because it will be calculated in the function body</span>
+	<span class="token keyword">else</span><span class="token punctuation">:</span>
+		rpc_id<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">"spawn_players"</span><span class="token punctuation">,</span> gamestate<span class="token punctuation">.</span>player_info<span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+		rpc_id<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">"sync_bots"</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</div>
+<p>Lastly, we want to remove bots when someone leaves the game. Since this function is meant to be first dealt with from the server, we call it from there. Now, remember we have added an event that is meant to be handled only on the server? The function we have created connected to this event is called <code class="">_on_player_remover()</code>. We can simply add a call to the <code class="">sync_bots()</code> right after calling the <code class="">despawn_player()</code> function:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">game_world.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">func _on_player_removed<span class="token punctuation">(</span>pinfo<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	despawn_player<span class="token punctuation">(</span>pinfo<span class="token punctuation">)</span>
+	sync_bots<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>       <span class="token comment"># Again, amount doesn't matter at this point because the server side section will take care of it</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span></span></code></pre>
+</div>
+<h3>Conclusion</h3>
+<p>Excellent, now we have “fully” synchronized bots within this little multiplayer project! By fully I mean, the correct amount, rotation and movement! However, you may have noticed that the colors don’t match on any of the connected peers. That’s because we are randomly selecting the modulate color at the initialization of each bot and not synchronizing that in any way! Although that is relatively simple to fix, I will leave it that way as the most important aspects of the multiplayer system have been covered. At least, I hope so.</p>
+<p>This tutorial shows a relatively simple system that is also easy to expand to any needs. Because the players visual representation are provided by dictionary fields, it becomes a simple task of just adding more fields into it and/or change how they are affected by the various events in the game or UI to bring more options regarding how thing will be spawned/shown in the game</p>
+<p>While the concept of <em>remote procedure calls</em> can be a bit confusing at first, hopefully the explanation in here as well as the commented code snippets are enough for you to understand what they do and how to use them.</p>
+<p>EDIT: Now there is a followup tutorial with more networking. It can be found <a href="http://kehomsforge.com/tutorials/multi/gdMoreNetworking">here</a>. It contains the following topics:</p>
+<ul>
+<li>Fixes to some oversights of this tutorial</li>
+<li>Basic authoritative server</li>
+<li>Latency simulation and measurement</li>
+<li>Snapshot interpolation</li>
+<li>Player kicking</li>
+<li>Chat system</li>
+</ul>
+<hr>
+<p>Now take the information you just learned (at least I hope you did), expand and adapt into your project needs and bring on some really fun multiplayer to the world!</p>
+<p>Happy forging!</p>
+
+
+         <hr>
+         <div class="centerblock">
+            <a href="http://kehomsforge.com/tutorials/multi/gdMultiplayerSetup">Introduction</a><br>
+
+            
+
+               <a href="http://kehomsforge.com/tutorials/multi/gdMultiplayerSetup/part03">Previous</a>
+
+               <a href="http://kehomsforge.com/tutorials/multi/gdMultiplayerSetup/part01" class="bottomnav">01</a>
+               <a href="http://kehomsforge.com/tutorials/multi/gdMultiplayerSetup/part02" class="bottomnav">02</a>
+               <a href="http://kehomsforge.com/tutorials/multi/gdMultiplayerSetup/part03" class="bottomnav">03</a>
+               <p class="bottomnav">04</p>
+
+
+         </div>
+
+      </div>
+   </div>
+
+   <div class="footer">
+      ...
+   </div>
+</div>
+
+
+
+</body></html>

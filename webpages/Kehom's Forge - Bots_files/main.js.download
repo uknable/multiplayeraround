@@ -1,0 +1,364 @@
+"use strict";
+
+/// Helper Functions
+
+// Use to select text within the specified element
+function selectText(element) {
+   // Code found at: https://stackoverflow.com/questions/985272/selecting-text-in-an-element-akin-to-highlighting-with-your-mouse
+   var range;
+
+   if (document.body.createTextRange) {
+      range = document.body.createTextRange();
+      range.moveToElementText(element);
+      range.select();
+   } else if (window.getSelection) {
+      var selection = window.getSelection();
+      range = document.createRange();
+      range.selectNodeContents(element);
+      selection.removeAllRanges();
+      selection.addRange(range);
+   }
+}
+
+
+/// "Automatically" run when page finishes loading
+
+// Function meant to adjust the height of the sidebar or the contents column so
+// they match.
+function adjustMiddleHeights() {
+   /*
+   var sidebar = $(".sidebar");
+   var content = $(".content");
+
+   if (sidebar.height() < content.height()) {
+      // Readjust sidebar height as it's smaller
+      sidebar.height(content.height());
+   } else {
+      // Readjust content height as it's (likely) smaller
+      content.height(sidebar.height());
+   }*/
+}
+
+
+// Make the buttons of class acc_button act to display/hide the following panel
+// bringing the "accordion" behavior
+function processAccordion() {
+   $(".acc_button").click(function() {
+
+      // Toggle the acc_active style
+      $(this).toggleClass("acc_active");
+
+      // Slide the "sub-menu" up or down
+      var child = $(this).next();
+      child.slideToggle(400, adjustMiddleHeights);
+   });
+}
+
+function processLightbox() {
+   // When the zoomed image is shown, disable page scrolling
+   function disableScroll() {
+      $('html, body').css({
+         overflow: 'hidden',
+      });
+   }
+
+   // Once the zoomed image is closed, must re-enable the page scrolling
+   function enableScroll() {
+      $('html, body').css({
+         overflow: 'auto',
+      });
+   }
+
+   // Get the page position of the clicked image, as well as the shown dimensions
+   function getImageBox($img) {
+      const offset = $img.offset();
+
+      var ret = {
+         width: $img.width(),
+         height: $img.height(),
+         left: offset.left,
+         top: offset.top - $(window).scrollTop(),
+      }
+
+      return ret;
+   }
+
+   // And the centered position and size of the final zoomed image
+   function getZoomedBox($light, $img) {
+      const img = $img.get(0);
+      const constraintX = $light.width() * 0.85;
+      const constraintY = $light.height() * 0.85;
+
+      var imgScale = 1.0;
+
+      if (img.naturalWidth > constraintX || img.naturalHeight > constraintY) {
+         const s1 = constraintX / img.naturalWidth;
+         const s2 = constraintY / img.naturalHeight;
+
+         imgScale = (s1 > s2 ? s2 : s1);
+      }
+
+      const w = imgScale * img.naturalWidth;
+      const h = imgScale * img.naturalHeight;
+
+      return {
+         width: w,
+         height: h,
+         top: ($light.height() / 2) - (h / 2),
+         left: ($light.width() / 2) - (w / 2),
+      }
+   }
+
+   function getCloseButton($zoomBox) {
+      const top = $zoomBox.top-28;
+      const left = $zoomBox.left+$zoomBox.width;
+
+      return $(`<div class="close-button" style="top: ${top}px; left: ${left}px;">&times</div>`);
+   }
+
+   function getCaption(caption, $zoomBox) {
+      const style = {
+         position: 'fixed',
+         top: $zoomBox.top+$zoomBox.height,
+         left: $zoomBox.left+5,
+         color: '#d0d0d0',
+      }
+
+      var $ret = $(`<p>${caption}</p>`);
+      $ret.css(style);
+
+      return $ret;
+   }
+
+
+   function buildLightBox($img) {
+      $img.addClass('can-zoom');
+
+      $img.click(function() {
+         function closeZoomed() {
+            $bt_close.fadeOut(200);
+            $caption.fadeOut(200);
+
+            $zoomed.animate(getImageBox($img), 500, 'swing', function() {
+               $light_box.toggle();
+               $bt_close.remove();
+               $zoomed.remove();
+               $caption.remove();
+               $light_box.remove();
+               enableScroll();
+            });
+         }
+
+
+         disableScroll();
+         var $light_box = $('<div class="lightbox"></div>');
+         var $zoomed = $img.clone().removeAttr('style').removeAttr('class').css('position', 'fixed');
+         $zoomed.css(getImageBox($img));
+
+         $light_box.append($zoomed);
+         $img.after($light_box);
+
+         $light_box.toggle();
+
+         const zBox = getZoomedBox($light_box, $img);
+
+         var $bt_close = getCloseButton(zBox);
+         $bt_close.hide();
+         $light_box.append($bt_close);
+
+         const cpt = $img.get(0).alt ? $img.get(0).alt : '';
+         var $caption = getCaption(cpt, zBox);
+         $caption.hide();
+         $light_box.append($caption);
+
+         $bt_close.click(function() {
+            closeZoomed();
+         });
+
+         $zoomed.click(function(event) {
+            // TODO: something when the image is clicked - maybe zoom even further to 100% size
+
+            // Without this, the event propagates to the lightbox container.
+            event.stopPropagation();
+         });
+
+         $light_box.click(function(event) {
+            closeZoomed();
+         });
+         
+         $zoomed.animate(zBox, 500, 'swing', function() {
+            $bt_close.fadeIn();
+            if ($caption) {
+               $caption.fadeIn();
+            }
+         });
+      });
+   }
+
+   function loadBox($img) {
+      // If element has 'can-zoom' class then it was already processed and likely working
+      // with the lightbox code
+      if ($img.hasClass('can-zoom')) {
+         return;
+      }
+
+      const img = $img.get(0);
+
+      if (img.naturalWidth > 350 || img.naturalHeight > 350) {
+         buildLightBox($img);
+      }
+
+      adjustMiddleHeights();
+   }
+
+   var $img_thumb = $('img.thumbnail');
+   $img_thumb.on('load', function() {
+      loadBox($(this));
+   });
+   // Some browsers don't fire the "onLoad" event when the image in cached
+   $img_thumb.each(function() {
+      const img = $(this).get(0);
+      if (img.complete) {
+         loadBox($(this));
+      }
+   })
+
+
+}
+
+
+function processTutorialCardFilter() {
+   var not_found = $(".filter-not-found");   
+   var input = $(".tutorial-filter-container input");
+   var bt_clear = $(".tutorial-filter-container button");
+   var tut_card = $(".tutorial-card");
+
+   function showAllCards() {
+      tut_card.each(function() {
+         $(this).css('display', 'block');
+      });
+      not_found.css('display', 'none');
+
+      adjustMiddleHeights();
+   }
+
+   function checkFilter(criteria) {
+      var hidden_count = 0;
+
+      tut_card.each(function() {
+         const txt = $(this).text().toLowerCase();
+
+         if (txt.search(criteria) == -1) {
+            $(this).css('display', 'none');
+            hidden_count++;
+         } else {
+            $(this).css('display', 'block');
+         }
+      });
+
+      if (hidden_count == tut_card.length) {
+         not_found.css('display', 'block');
+      } else {
+         not_found.css('display', 'none');
+      }
+
+      adjustMiddleHeights();
+   }
+
+   input.val(null);
+
+   input.on("change paste keyup", function() {
+      const value = input.val().trim().toLowerCase();
+      if (value) {
+         bt_clear.css('display', 'block');
+
+         checkFilter(value);
+      } else {
+         bt_clear.css('display', 'none');
+         showAllCards();
+      }
+   });
+
+   input.on("focus", function() {
+      input.select();
+   });
+
+   bt_clear.click(function() {
+      input.val(null);
+      bt_clear.css('display', 'none');
+      showAllCards();
+   });
+}
+
+function processCodeBlockToolbar() {
+   function onSelectCode(event) {
+      selectText(event.data.the_tag);
+   }
+
+   // Iterate through each code block container
+   $(".cblock-container").each(function() {
+      // First create the buttons
+      var $bt_sel = $('<button>Select</button>');
+
+      // And the container to hold those buttons
+      var $bar = $('<div class="cblock-bar"></div>');
+
+      // By default the bar should be hidden
+      $bar.hide();
+
+      // Append the button to the bar
+      $bar.append($bt_sel);
+
+      // Add the bar to the container
+      $(this).prepend($bar);
+
+      // Attach event handlers to the button
+      var event_data = {
+         the_tag: $(this).find('pre > code').get(0)
+      }
+
+      $bt_sel.on('click', event_data, onSelectCode);
+
+      // Display/Hide the buttons when hovering the block container
+      $(this).hover(function() {
+         // hover in
+         var $the_bar = $(this).children('.cblock-bar');
+         $the_bar.fadeIn(100);
+
+      }, function() {
+         // hover out
+         var $the_bar = $(this).children('.cblock-bar');
+         $the_bar.fadeOut(100);
+      });
+   });
+}
+
+function processAudioPlayer() {
+   $('.audio-player').each(function() {
+      var a_player = new audioPlayer();
+      a_player.createFromExisting($(this));
+   });
+}
+
+function processProgressBar() {
+   // Scans for all div with "progress-bar" class and provide interactivity with it.
+   // This will automatically use the helper function that is used to add
+   // the event handlers
+   $('.progress-bar.interactive').each(function() {
+      var pg_bar = new progressBar();
+      pg_bar.createFromExisting($(this));
+   });
+}
+
+
+// Automatically called to initialize the page script
+$(document).ready(function () {
+   processAccordion();
+   processLightbox();
+   processTutorialCardFilter();
+   processCodeBlockToolbar();
+   processAudioPlayer();
+   processProgressBar();
+
+   adjustMiddleHeights();
+});

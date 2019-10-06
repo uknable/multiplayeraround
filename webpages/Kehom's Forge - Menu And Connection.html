@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://kehomsforge.com/tutorials/multi/gdMultiplayerSetup/part02/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   
+   <title>Kehom's Forge - Menu And Connection</title>
+
+   <link rel="stylesheet" type="text/css" href="./Kehom&#39;s Forge - Menu And Connection_files/main.css">
+   <link rel="stylesheet" type="text/css" href="./Kehom&#39;s Forge - Menu And Connection_files/prism.css">
+   <link rel="stylesheet" type="text/css" href="./Kehom&#39;s Forge - Menu And Connection_files/katex.min.css">
+   <script src="./Kehom&#39;s Forge - Menu And Connection_files/jquery-3.3.1.min.js.download"></script>
+   <script src="./Kehom&#39;s Forge - Menu And Connection_files/progress_bar.js.download"></script>
+   <script src="./Kehom&#39;s Forge - Menu And Connection_files/audio_player.js.download"></script>
+   <script src="./Kehom&#39;s Forge - Menu And Connection_files/main.js.download"></script></head>
+<body>
+
+<div class="page-container">
+
+   <div class="header">
+      <a href="http://kehomsforge.com/"><img src="./Kehom&#39;s Forge - Menu And Connection_files/title_anvil.png" style="margin: 0; padding: 0"><img src="./Kehom&#39;s Forge - Menu And Connection_files/title.png" style="margin: 0; padding: 0"></a>
+   </div>
+
+   <div class="col-container clearfix">
+      <div class="column sidebar sidenav">
+         <a href="http://kehomsforge.com/" class="">Home</a>
+         <a href="http://kehomsforge.com/tutorials" class="active">Tutorials</a>
+         <a href="http://kehomsforge.com/blog/1/" class="">Blog</a>
+         <a href="http://kehomsforge.com/news/1/" class="">News</a>
+         <a href="http://kehomsforge.com/contact" class="">Contact</a>
+         <a href="http://kehomsforge.com/about" class="">About</a>
+         <hr>
+      
+         <button class="acc_button">
+            <img src="./Kehom&#39;s Forge - Menu And Connection_files/feed-icon.svg" style="width: 16px; height: 16px; vertical-align: middle;" onerror="this.src=\" feed-icon.png\';'="">
+            <span style="">RSS</span>
+         </button>
+         <div class="acc_panel">
+            <a href="http://kehomsforge.com/newsfeed.xml">News</a>
+            <a href="http://kehomsforge.com/blogfeed.xml">Blog</a>
+            <a href="http://kehomsforge.com/allfeed.xml">News + Blog</a>
+         </div>
+      
+      
+      </div>
+      
+
+      <div class="column content">
+         
+         <h2>Part 2 - Main Menu and Network Connection</h2>
+<p>In this part we will create some rudimentary “main menu” screen. By rudimentary, I will not care about layout or visual style. Only the necessary widgets do deal with server creation or multiplayer joining. We then start coding the <code class="">network.gd</code> and <code class="">gamestate.gd</code> and then attach an script into the <code class="">main_menu.tscn</code> root node in order to use the networking code.</p>
+<h3>The Main Menu</h3>
+<p>The requirements here are not very big. We will “split the layout” in 3 sections.</p>
+<ol>
+<li>Player information, such as player name and “dominant” color for the icon representing that player’s avatar</li>
+<li>Server creation information, such as name, maximum allowed connections and listening port</li>
+<li>Joining server information, which means the server IP and port.</li>
+</ol>
+<p>That said, add 3 panel nodes just so we can better group those sections and, if needed, easily reposition each group within the screen. Name then as <code class="">PanelPlayer</code>, <code class="">PanelHost</code> and <code class="">PanelJoin</code>.</p>
+<p>Within the <code class="">PanelPlayer</code> we provide a single line text input (<code class="">LineEdit</code> node) named <code class="">txtPlayerName</code> meant to get the player name. To make it clear in the UI what this input is about, above it we put a label saying <em>“Player name:”</em>. Bellow the text input we add an sprite that will hold the default Godot icon. This could be any image really and even give room for avatar customization if desired. Nevertheless, we rename this sprite node to <code class="">PlayerIcon</code>. Then we add a <code class="">Color Picker Button</code> node, naming it <code class="">btColor</code>, which allows the player to choose the “dominant” color of the icon. Select the <code class="">btColor</code> and set the <code class="">Color</code> property to be fully white, which means no color modulation will occur. Bellow it we add a common button named <code class="">btDefaultColor</code> and <code class="">Text = Default</code>, which will be used to reset the color to the default one. Above those buttons we add a label saying <em>“Color”</em>. Note that I didn’t rename every single widget node. Ideally we should but I only renamed those that we will have to reference from the GDScript. The node hierarchy looks like this:</p>
+<div class="centerblock">
+<img src="./Kehom&#39;s Forge - Menu And Connection_files/02-panelplayer.png" class="thumbnail" alt="Panel Player Hierarchy">
+</div>
+<p>Into the <code class="">PanelHost</code> we need a single line text input to provide the server name. This node should be named <code class="">txtServerName</code>. Another single line text for the listening port, named <code class="">txtServerPort</code>. For it’s default value, enter <em>4546</em> or any other really. Just be careful to not use some <a href="https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers">common port</a> in order to avoid conflict problems. An <code class="">SpinBox</code> node named <code class="">txtMaxPlayers</code> which will give us the maximum allowed connections. Set it’s min value to <code class="">2</code> and max value to <code class="">16</code> while setting the current value to <code class="">6</code> (which will be the default one - keep this number relatively low in order to help with testing at a later moment). A common button node is used to effectively create the server. It’s then named <code class="">btCreate</code> and it’s display text <code class="">Create</code>. Several labels are placed in order to better tell what each control is meant to do. The hierarchy looks like this:</p>
+<div class="centerblock">
+<img src="./Kehom&#39;s Forge - Menu And Connection_files/02-panelhost.png" class="thumbnail" alt="Panel Host Hierarchy">
+</div>
+<p>For the <code class="">PanelJoin</code> we only require two single line text (<code class="">LineEdit</code> node), one for the IP and the other for the joining port. We name then <code class="">txtJoinIP</code> and <code class="">txtJoinPort</code>, respectively. As default text we enter <code class="">127.0.0.1</code> in the <code class="">txtJoinIP</code>, which is an special IP address value that points into the local machine. As for the default value of the <code class="">txtJoinPort</code>, set it to the same value of <code class="">txtServerPort</code> (<em>4546</em>). A button labeled <code class="">Join</code> and named <code class="">btJoin</code> will then be used to effectively try to join the server. The hierarchy looks like this:</p>
+<div class="centerblock">
+<img src="./Kehom&#39;s Forge - Menu And Connection_files/02-paneljoin.png" class="thumbnail" alt="Panel Join Hierarchy">
+</div>
+<p>And the actual menu looks like this (those colored lines are part of the top-left corner of the canvas):</p>
+<div class="centerblock">
+<img src="./Kehom&#39;s Forge - Menu And Connection_files/02-menuresult.png" class="thumbnail can-zoom" alt="Menu Result">
+</div>
+<p>There is one problem here, though. If you click the color picker button, the popup will appear bellow the “create server” and “join server” panels. To fix that we have to move the <code class="">PanelPlayer</code> down bellow on the tree hierarchy:</p>
+<div class="centerblock">
+<img src="./Kehom&#39;s Forge - Menu And Connection_files/02-panelhiearchy.png" class="thumbnai" alt="Panel Hierarchy">
+</div>
+<p>Shortly we will attach an script into this menu and deal with the networking, which is the next thing we will work on.</p>
+<h3>Network Events</h3>
+<p>There are several events that are sent by the Godot’s networking system and we will want to listen to those in order to act accordingly. Those events are:</p>
+<ul>
+<li><em>connected_to_server()</em> → This will be emitted to the client that has just joined a server. We will use this to perform some client side actions when successfully connected to a server.</li>
+<li><em>connection_failed()</em> → Whenever trying to join a server and it fails, that client gets this event. We can use it to display some kind of error message.</li>
+<li><em>network_peer_connected(id)</em> → This will be sent to everyone connected in the server whenever a new client joins. The <code class="">id</code> argument tells the unique ID of the newly connected machine. We will use this to perform some initial synchronization between the peers.</li>
+<li><em>network_peer_disconnected(id)</em> → Once a client disconnects from a server, everyone still in it gets this event, with the disconnected client’s ID as argument. We will also use this to perform synchronization between the remaining peers.</li>
+<li><em>server_disconnected()</em> → When a client disconnects from the server, that player’s game will get this event. We will use this to reset some internal data in the disconnected client.</li>
+</ul>
+<p>There is one more event that I will not cover in this tutorial, which is used for custom packet data.</p>
+<p>We will listen to all 5 listed events, so let’s first create 5 “empty” functions in the <code class="">network.gd</code>:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">network.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python"><span class="token comment"># Everyone gets notified whenever a new client joins the server</span>
+func _on_player_connected<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">pass</span>
+
+
+<span class="token comment"># Everyone gets notified whenever someone disconnects from the server</span>
+func _on_player_disconnected<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">pass</span>
+
+
+<span class="token comment"># Peer trying to connect to server is notified on success</span>
+func _on_connected_to_server<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">pass</span>
+
+
+<span class="token comment"># Peer trying to connect to server is notified on failure</span>
+func _on_connection_failed<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">pass</span>
+
+
+<span class="token comment"># Peer is notified when disconnected from server</span>
+func _on_disconnected_from_server<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">pass</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</div>
+<p>Now we can connect those functions to the event signals. In order to do that, we override the <code class="">_ready()</code> function in the network class file:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">network.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">func _ready<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	get_tree<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>connect<span class="token punctuation">(</span><span class="token string">"network_peer_connected"</span><span class="token punctuation">,</span> self<span class="token punctuation">,</span> <span class="token string">"_on_player_connected"</span><span class="token punctuation">)</span>
+	get_tree<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>connect<span class="token punctuation">(</span><span class="token string">"network_peer_disconnected"</span><span class="token punctuation">,</span> self<span class="token punctuation">,</span> <span class="token string">"_on_player_disconnected"</span><span class="token punctuation">)</span>
+	get_tree<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>connect<span class="token punctuation">(</span><span class="token string">"connected_to_server"</span><span class="token punctuation">,</span> self<span class="token punctuation">,</span> <span class="token string">"_on_connected_to_server"</span><span class="token punctuation">)</span>
+	get_tree<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>connect<span class="token punctuation">(</span><span class="token string">"connection_failed"</span><span class="token punctuation">,</span> self<span class="token punctuation">,</span> <span class="token string">"_on_connection_failed"</span><span class="token punctuation">)</span>
+	get_tree<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>connect<span class="token punctuation">(</span><span class="token string">"server_disconnected"</span><span class="token punctuation">,</span> self<span class="token punctuation">,</span> <span class="token string">"_on_disconnected_from_server"</span><span class="token punctuation">)</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</div>
+<h3>Creating the Server</h3>
+<p>When we are in the main menu and click the <code class="">Create</code> button within the <em>create server</em> panel, we will want to initialize the network, try to create the server and, if successful, assign that into the node tree. Shortly we will create a function that will make those tasks easier for us, and call that function from the “click event” of that button. In order to create the server itself we require the listening port as well as the maximum allowed connections. Those will be obtained from the widgets we have added previously, but rather than providing them to the function through arguments, we will setup some member variables. Or rather one member dictionary that will give us the necessary information. That said, let’s declare it:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">network.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">var server_info <span class="token operator">=</span> <span class="token punctuation">{</span>
+	name <span class="token operator">=</span> <span class="token string">"Server"</span><span class="token punctuation">,</span>      <span class="token comment"># Holds the name of the server</span>
+	max_players <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>      <span class="token comment"># Maximum allowed connections</span>
+	used_port <span class="token operator">=</span> <span class="token number">0</span>         <span class="token comment"># Listening port</span>
+<span class="token punctuation">}</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</div>
+<p>Within the function we will use the information stored in this dictionary. Ideally we <em>should</em> verify the validity of what is stored in there, but for simplicity sake, in this tutorial we wont. Prior to calling the function we will set those, but for now let’s work on the new “Create Server Function”. In it we first have to obtain a new network object. With it we then try to create the server, providing the port and max connections from the dictionary. If failed we just print the text, although in the end it should be replaced by a message box or something to tell the user the server creation has failed. Normally a failure here happens when the listening port is already in use in that machine. Anyway, the last task of the function is to assign the network object into the tree:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">network.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">func create_server<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token comment"># Initialize the networking system</span>
+	var net <span class="token operator">=</span> NetworkedMultiplayerENet<span class="token punctuation">.</span>new<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	
+	<span class="token comment"># Try to create the server</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>net<span class="token punctuation">.</span>create_server<span class="token punctuation">(</span>server_info<span class="token punctuation">.</span>used_port<span class="token punctuation">,</span> server_info<span class="token punctuation">.</span>max_players<span class="token punctuation">)</span> <span class="token operator">!=</span> OK<span class="token punctuation">)</span><span class="token punctuation">:</span>
+		<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Failed to create server"</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span>
+	
+	<span class="token comment"># Assign it into the tree</span>
+	get_tree<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>set_network_peer<span class="token punctuation">(</span>net<span class="token punctuation">)</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</div>
+<p>Now let’s use this new function. We will call it once a button (<code class="">btCreate</code>) in the main menu is clicked. This means we have to attach a new script into the <code class="">main_menu.tscn</code> root node. Do that and name the new file <code class="">main_menu.gd</code>. For the moment it should contain a single line, <code class="">extends CanvasLayer</code>. Ok, now, select the <code class="">btCreate</code> and within the <code class="">Node</code> panel choose to create a new function connected to the <code class="">Pressed</code> signal. Make sure it’s connected to the <code class="">CanvasLayer</code> node. The default function name given by the editor is fine.</p>
+<p>In the created function we will set all 3 <code class="">network.server_info</code> dictionary entries, gathering the values from the input widgets within the main menu. Although in the code I check if the server name is empty or not, ideally we should handle the <code class="">text_changed(new_text)</code> signal and in there enable or disable the <code class="">btCreate</code> button based on the conditions that all fields must be filled. For simplicity sake we just just take the values and that’s it. Since port and the maximum amount of connections must be integers, we convert them from text. The resulting script should be pretty straightforward:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">main_menu.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">func _on_btCreate_pressed<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token comment"># Gather values from the GUI and fill the network.server_info dictionary</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>!$PanelHost<span class="token operator">/</span>txtServerName<span class="token punctuation">.</span>text<span class="token punctuation">.</span>empty<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+		network<span class="token punctuation">.</span>server_info<span class="token punctuation">.</span>name <span class="token operator">=</span> $PanelHost<span class="token operator">/</span>txtServerName<span class="token punctuation">.</span>text
+	network<span class="token punctuation">.</span>server_info<span class="token punctuation">.</span>max_players <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>$PanelHost<span class="token operator">/</span>txtMaxPlayers<span class="token punctuation">.</span>value<span class="token punctuation">)</span>
+	network<span class="token punctuation">.</span>server_info<span class="token punctuation">.</span>used_port <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>$PanelHost<span class="token operator">/</span>txtServerPort<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
+	
+	<span class="token comment"># And create the server, using the function previously added into the code</span>
+	network<span class="token punctuation">.</span>create_server<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</div>
+<p>If you decide to test the game now, clicking the <em>create</em> button will apparently do nothing. Clicking it again will display (in the output panel) the “Failed to create server” message. This happens because the server is indeed created but we haven’t done anything to make it clear about the fact. When pressed again it will try to use a port that is already in use. The thing we can do that will be the most obvious the server has successfully created is to transition into the game world scene. We will do so, but we need to know the server has been created. We can either return a “true” from the <code class="">network.create_server()</code> function or emit a signal. I have chosen the second option because it will give a more consistent “success vs failure” handling throughout the project. The thing is, there will be cases that we wont be able to use return values (I will mention them at the relevant time).</p>
+<p>That said, we have to move back to the <code class="">network.gd</code> file and declare that this class will emit a signal. In this case we can name it <code class="">server_created</code>:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">network.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">signal server_created                          <span class="token comment"># when server is successfully created</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span></span></code></pre>
+</div>
+<p>And then, we update the <code class="">create_server()</code> function to emit this signal:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">network.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">func create_server<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token comment"># Initialize the networking system</span>
+	var net <span class="token operator">=</span> NetworkedMultiplayerENet<span class="token punctuation">.</span>new<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	
+	<span class="token comment"># Try to create the server</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>net<span class="token punctuation">.</span>create_server<span class="token punctuation">(</span>server_info<span class="token punctuation">.</span>used_port<span class="token punctuation">,</span> server_info<span class="token punctuation">.</span>max_players<span class="token punctuation">)</span> <span class="token operator">!=</span> OK<span class="token punctuation">)</span><span class="token punctuation">:</span>
+		<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Failed to create server"</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span>
+	
+	<span class="token comment"># Assign it into the tree</span>
+	get_tree<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>set_network_peer<span class="token punctuation">(</span>net<span class="token punctuation">)</span>
+	<span class="token comment"># Tell the server has been created successfully</span>
+	emit_signal<span class="token punctuation">(</span><span class="token string">"server_created"</span><span class="token punctuation">)</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</div>
+<p>Now that we have an event telling the server has been created, we have to handle it. First, we connect a function to it, from the <code class="">_ready()</code> function in the <code class="">main_menu.gd</code> class (don’t worry, we will create the function shortly):</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">main_menu.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">func _ready<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	network<span class="token punctuation">.</span>connect<span class="token punctuation">(</span><span class="token string">"server_created"</span><span class="token punctuation">,</span> self<span class="token punctuation">,</span> <span class="token string">"_on_ready_to_play"</span><span class="token punctuation">)</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span></span></code></pre>
+</div>
+<p>Based on this code, we will use a function named <code class="">_on_ready_to_play()</code> in order to handle the event. All we do in this function is change into the game world scene:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">main_menu.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">func _on_ready_to_play<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	get_tree<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>change_scene<span class="token punctuation">(</span><span class="token string">"res://game_world.tscn"</span><span class="token punctuation">)</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span></span></code></pre>
+</div>
+<p>And testing now, clicking the <em>create</em> button should move into the game world scene, which is completely empty for the moment. We will work on that in the next part. Nevertheless, we now know the server creation has worked, or at least it seems so!</p>
+<h3>Joining a Server</h3>
+<p>Ok, we now have means to create a server, but how about joining one? We will follow the same strategy of creating a function in the <code class="">network.gd</code> file meant to hold the joining code. In this case we will request the necessary data through function arguments, which are the <em>IP</em> and <em>port</em>. We won’t use the server_info dictionary in here because those are meant to hold server information. Another thing to mention here is that joining server can’t use return values to “tell” when we successfully got into a server or not. For that we have the <code class="">connected_to_server</code> signal that is emitted by the network API provided by Godot. We are already handling this event with the <code class="">_on_connected_to_server()</code> function. Since we want outside code to also react to the success (or failure) of connecting to a server, we will create another two signals, one named <code class="">join_success</code> and another called <code class="">join_fail</code>:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">network.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">signal server_created                          <span class="token comment"># when server is successfully created</span>
+signal join_success                            <span class="token comment"># When the peer successfully joins a server</span>
+signal join_fail                               <span class="token comment"># Failed to join a server</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span></span></code></pre>
+</div>
+<p>Let’s then work on the function used to try to join a server. In there we first initialize the network object, try to join a server using the given arguments (IP and port) and then we assign the network object into the node tree:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">network.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">func join_server<span class="token punctuation">(</span>ip<span class="token punctuation">,</span> port<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	var net <span class="token operator">=</span> NetworkedMultiplayerENet<span class="token punctuation">.</span>new<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>net<span class="token punctuation">.</span>create_client<span class="token punctuation">(</span>ip<span class="token punctuation">,</span> port<span class="token punctuation">)</span> <span class="token operator">!=</span> OK<span class="token punctuation">)</span><span class="token punctuation">:</span>
+		<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Failed to create client"</span><span class="token punctuation">)</span>
+		emit_signal<span class="token punctuation">(</span><span class="token string">"join_fail"</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span>
+		
+	get_tree<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>set_network_peer<span class="token punctuation">(</span>net<span class="token punctuation">)</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</div>
+<p>Notice the fact that we still don’t know if the joining was successful or not. We are handling two events emitted by the network API that will tell us about the fact. In the case of the success, <code class="">_on_connected_to_server()</code>, for the moment we will just emit our own <code class="">join_success</code> signal. As for the failure, we emit our own <code class="">join_fail</code> signal as well as clear the network object from the node tree:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">network.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python"><span class="token comment"># Peer trying to connect to server is notified on success</span>
+func _on_connected_to_server<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	emit_signal<span class="token punctuation">(</span><span class="token string">"join_success"</span><span class="token punctuation">)</span>
+
+
+<span class="token comment"># Peer trying to connect to server is notified on failure</span>
+func _on_connection_failed<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	emit_signal<span class="token punctuation">(</span><span class="token string">"join_fail"</span><span class="token punctuation">)</span>
+	get_tree<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>set_network_peer<span class="token punctuation">(</span>null<span class="token punctuation">)</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</div>
+<p>We now can join a server, we just need to call this function from the main menu! Ok, we also need to listen to the signals telling about success or failure. So, let’s first connect them. For the success we will reuse the <code class="">_on_ready_to_play()</code> function, although it would be a good idea to separate that into a different function if there is any need to perform different tasks based on wether we are creating or joining a server. As for the failure we will create a new function shortly. The connections:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">main_menu.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">func _ready<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	network<span class="token punctuation">.</span>connect<span class="token punctuation">(</span><span class="token string">"server_created"</span><span class="token punctuation">,</span> self<span class="token punctuation">,</span> <span class="token string">"_on_ready_to_play"</span><span class="token punctuation">)</span>
+	network<span class="token punctuation">.</span>connect<span class="token punctuation">(</span><span class="token string">"join_success"</span><span class="token punctuation">,</span> self<span class="token punctuation">,</span> <span class="token string">"_on_ready_to_play"</span><span class="token punctuation">)</span>
+	network<span class="token punctuation">.</span>connect<span class="token punctuation">(</span><span class="token string">"join_fail"</span><span class="token punctuation">,</span> self<span class="token punctuation">,</span> <span class="token string">"_on_join_fail"</span><span class="token punctuation">)</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span><span></span></span></code></pre>
+</div>
+<p>As for the <code class="">_on_join_fail()</code> function, all we will do is print a message, which will appear in the output panel of the Godot editor. Of course, in a final product we would display an error message dialog to the player. Nevertheless, here is the code:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">main_menu.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">func _on_join_fail<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Failed to join server"</span><span class="token punctuation">)</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span></span></code></pre>
+</div>
+<p>Lastly, we have to connect the <code class="">btJoin</code> pressed signal and call the <code class="">network.join_server()</code> function. As with the create server, we will gather the necessary information from the input widgets. That said, select the <code class="">btJoin</code> button and, from the node panel, create a new connection to the <code class="">pressed()</code> signal. The default function name is fine. The resulting code:</p>
+<div class="cblock-container"><div class="cblock-bar" style="display: none;"><button>Select</button></div>
+<div class="centerblock">
+<p><code class="">main_menu.gd</code></p>
+</div>
+<pre class="language-python line-numbers"><code class="language-python">func _on_btJoin_pressed<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	var port <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>$PanelJoin<span class="token operator">/</span>txtJoinPort<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
+	var ip <span class="token operator">=</span> $PanelJoin<span class="token operator">/</span>txtJoinIP<span class="token punctuation">.</span>text
+	network<span class="token punctuation">.</span>join_server<span class="token punctuation">(</span>ip<span class="token punctuation">,</span> port<span class="token punctuation">)</span>
+<span class="line-numbers-rows" aria-hidden="true"><span></span><span></span><span></span><span></span></span></code></pre>
+</div>
+<h3>Testing The Joining</h3>
+<p>To test the joining code we get exposed to one the limitations of the Godot at the moment. We can’t ask it to open multiple instances of the game. What some people do is open the editor multiple times and then hit the <em>play</em> button on each editor window. This does have a problem that output and debugging messages become completely mixed between the various editor instances.</p>
+<p>The way I have found to test is to first export the game into binary (luckily it’s relatively fast) and then open the game from it at least once, while also having one of the testing instances opened from the editor. Since we are testing, I do recommend exporting with debug so a console will be open for each game instance, outputting the various <code class="">print()</code> commands and some other engine information.</p>
+<hr>
+<p>Since we didn’t add anything to the game world, both the server and client will get an empty scene, which by default is gray. Nevertheless, we have fully functioning “create server” and “join server” capabilities!</p>
+<p>In the next part we display something in the game world in order to properly test our code. We will also incorporate some internal peer management, which will make things a bit easier to deal with.</p>
+
+
+         <hr>
+         <div class="centerblock">
+            <a href="http://kehomsforge.com/tutorials/multi/gdMultiplayerSetup">Introduction</a><br>
+
+            
+
+               <a href="http://kehomsforge.com/tutorials/multi/gdMultiplayerSetup/part01">Previous</a>
+
+               <a href="http://kehomsforge.com/tutorials/multi/gdMultiplayerSetup/part01" class="bottomnav">01</a>
+               <p class="bottomnav">02</p>
+               <a href="http://kehomsforge.com/tutorials/multi/gdMultiplayerSetup/part03" class="bottomnav">03</a>
+               <a href="http://kehomsforge.com/tutorials/multi/gdMultiplayerSetup/part04" class="bottomnav">04</a>
+
+               <a href="http://kehomsforge.com/tutorials/multi/gdMultiplayerSetup/part03">Next</a>
+
+         </div>
+
+      </div>
+   </div>
+
+   <div class="footer">
+      ...
+   </div>
+</div>
+
+
+
+</body></html>

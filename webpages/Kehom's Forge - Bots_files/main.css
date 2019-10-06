@@ -1,0 +1,532 @@
+/*
+ * By Kehom the Archer
+ */
+
+* {
+   box-sizing: border-box;
+}
+
+body {
+   background-color: #404040;
+}
+
+a {
+   text-decoration: none;
+}
+
+a:hover {
+   text-decoration: underline;
+}
+
+h1, h2, h3, h4, h5, h6 {
+   color: #602020;
+   margin: 30px;
+}
+
+p {
+   margin: 10px;
+}
+
+table {
+   border-spacing: 1px;
+   border: 1px solid #602020;
+   border-radius: 8px;
+   background-color: #e0e0e0;
+}
+
+table th {
+   background-color: #a0a0a0;
+   color: #602020;
+   padding: 2px 8px 2px 8px;
+}
+
+table td {
+   background-color: #d0d0d0;
+}
+
+table tr:hover td {
+   background-color: #bbbbbb;
+}
+
+
+blockquote {
+   display: block;
+   margin: 1em 40px 1em 40px;
+   border-left: 5px solid #602020;
+   border-radius: 4px;
+	padding: 0 10px;
+   background-color: #ebeed0;
+}
+
+/** Change cursor */
+.zoom-in {
+   cursor: zoom-in;
+}
+
+.zoom-out {
+   cursor: zoom-out;
+}
+
+/** Text that can't be selected 
+ *  There is no definition anywhere for this so it may not work
+ *  on some browsers
+ */
+.no-select {
+   -webkit-touch-callout: none;
+   -webkit-user-select: none;
+   -khtml-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}
+
+
+/** General layout */
+.centerblock {
+   display: block;
+   margin-left: auto;
+   margin-right: auto;
+   text-align: center;
+}
+
+.centerblock table {
+   margin: 0 auto;
+}
+
+.page-container {
+   display: block;
+   background-color: #ffffff;
+   border-style: solid;
+   border-color: #202060;
+   border-width: 8px 0 8px 0;
+   border-radius: 8px;
+   max-width: 1320px;
+   margin: auto;
+}
+
+
+.header {
+   color: #202060;
+   background-color: #c0c0c0;
+   border-top: 2px solid #202060;
+   margin-top: 2px;
+   padding: 2px 0px 2px 18px;
+}
+
+.header a {
+   text-decoration: none;
+   color: #202060;
+}
+
+.footer {
+   color: #202060;
+   background-color: #c0c0c0;
+   border-bottom: 2px solid #202060;
+   margin-bottom: 2px;
+   padding: 2px 0 2px 18px;
+}
+
+
+.clearfix:after {
+   content: "";
+   display: table;
+   clear: both;
+}
+
+.generic-container {
+   display: block;
+   margin: 5px 10px 5px 10px;
+   padding: 0;
+}
+
+.col-container {
+   overflow: hidden;
+   position: relative;
+}
+
+.column {
+   display: block;
+   position: relative;
+   padding: 4px;
+   margin: 4px;
+   border-radius: 4px;
+}
+
+.column.sidebar {
+   float: left;
+   width: 145px;
+   background-color: #c0c0c0;
+}
+
+.column.content {
+   overflow: hidden;
+   background-color: #e0e0e0;
+}
+
+.sidenav a {
+   display: block;
+   text-decoration: none;
+   color: #202060;
+   padding: 6px 0 6px 8px;
+   border-radius: 5px;
+}
+
+.sidenav a.indent1 {
+   padding-left: 20px;
+}
+
+.sidenav a.active {
+   background-color: #202060;
+   color: #c0c0c0;
+}
+
+.sidenav a:hover:not(.active) {
+   background-color: #602020;
+   color: #c0c0c0;
+}
+
+
+.bottomnav {
+   display: inline;
+   border: 0;
+   border-radius: 4px;
+   padding: 1px;
+}
+
+p.bottomnav  {
+   margin: 1px;
+   background-color: #602020;
+   color: #c0c0c0;
+}
+
+a.bottomnav {
+   background-color: #c0c0c0;
+}
+
+
+/**
+ * "Card" system 
+*/
+.card {
+   -moz-box-shadow: 0 4px 10px 0 #404040;
+   -webkit-box-shadow: 0 4px 10px 0 #404040;
+   box-shadow: 0 4px 10px 0 #404040;
+   border: 2px solid #602020;
+   border-radius: 8px;
+   margin: 25px;
+   background-color: #d0d0d0;
+   overflow-y: auto;
+}
+
+.card-layout {
+   display: table;
+   width: 100%;
+   height: 100%;
+   border-collapse: collapse;
+}
+
+.card .row {
+   display: table-row;
+   height: 100%;
+}
+
+.card .row:first-child, .row:last-child {
+   height: 1px;
+}
+
+.card .ctitle {
+   background-color: #a0a0a0;
+   border-bottom: 2px solid #ffffff;
+   border-radius: 8px 8px 0 0;
+}
+
+.card .ccontent {
+   display: table-cell;
+   border-top: 2px solid #602020;
+   border-bottom: 2px solid #602020;
+   height: 100%;
+   overflow-y: auto;
+}
+
+.card .cfooter {
+   background-color: #a0a0a0;
+   border-top: 2px solid #ffffff;
+   border-radius: 0 0 8px 8px;
+   overflow: hidden;
+}
+
+.card p,
+.card h1,
+.card h2,
+.card h3,
+.card h4,
+.card h5,
+.card h6 {
+   margin: 0;
+   padding: 5px 10px 5px 10px;
+}
+
+/*
+.card a {
+   padding-left: 15px;
+}*/
+
+
+/** News cards customization */
+.news-card {
+   display: block;
+}
+
+/** Tutorial cards customization */
+.tutorial-card {
+   display: block;
+   width: 330px;
+   height: 420px;
+   float: left;
+}
+
+.tutorial-card .ctitle {
+   height: 3.5em;
+}
+
+.tutorial-card .ccontent img {
+   margin: 8px;
+   width: 130px;
+   height: 130px;
+   float: left;
+   border: 2px solid #602020;
+   border-radius: 2px;
+}
+
+.tutorial-card .ccontent p {
+   margin: -15px 10px 5px 10px;
+   line-height: 1.45em;
+}
+
+.tutorial-card .tag {
+   font-size: 0.7em;
+   font-weight: bold;
+   background-color: #a0a0a0;
+   color: #602020;
+   margin: 2px;
+   float: left;
+   padding: 2px 4px 2px 8px;
+   border-radius: 15px 0 0 15px;
+   border: 1px solid #602020;
+}
+
+
+/** Image Thumbnails */
+
+.thumbnail {
+   max-width: 350px;
+   max-height: 350px;
+}
+
+.can-zoom {
+   cursor: pointer;
+   border: 2px solid #602020;
+   border-radius: 4px;
+}
+
+
+/** Accordion system */
+
+.acc_button {
+   background-color: #602020;
+   color: #c0c0c0;
+   cursor: pointer;
+   width: 100%;
+   outline: none;
+   border: none;
+   transition: 0.5s;
+   text-align: left;
+   padding: 5px 10px 5px 15px;
+
+   border-radius: 4px 4px 0 0;
+}
+
+/** using the unicode '\027985', for some reason, "kills" the color selection */
+.acc_button::after {
+   content: "+";
+   font-weight: bold;
+   float: right;
+   margin-left: 5px;
+}
+
+.acc_active, .acc_button:hover {
+   background-color: #202060;
+}
+
+/** Using unicode \02796, for some reason, "kills" the color selection */
+.acc_active::after {
+   content: "-";
+   font-weight: bold;
+}
+
+.acc_panel {
+   padding-left: 10px;
+   background-color: #a0a0a0;
+   display: none;
+   border-radius: 0 0 4px 4px;
+}
+
+.acc_panel a {
+   padding-left: 15px;
+}
+
+
+/** Lightbox */
+.lightbox {
+   position: fixed;
+   top: 0px;
+   left: 0px;
+   width: 100%;
+   height: 100%;
+   background-color: #000000;  /* Fallback */
+   background-color: rgba(0, 0, 0, 0.95);
+   z-index: 999;
+   display: none;
+}
+
+.lightbox img {
+   border: 4px solid #d0d0d0;
+   border-radius: 4px;
+}
+
+.lightbox .close-button {
+   position: fixed;
+   font: arial;
+   font-size: 28px;
+   color: #d0d0d0;
+   cursor: pointer;
+   font-weight: bold;
+}
+
+.lightbox .close-button:hover {
+   color: #602020;
+}
+
+/** Style the input box (and button) for the tutorial filter */
+.tutorial-filter-container {
+   position: relative;
+   background-color: #ebeed0;
+   display: inline-block;
+   border-radius: 8px;
+   border: 2px solid #602020;
+   margin-left: 25px;
+}
+
+.tutorial-filter-container input[type=text] {
+   padding: 6px;
+   border: none;
+   text-align: left;
+   width: 240px;
+   background-color: transparent;
+}
+
+.tutorial-filter-container button {
+   position: absolute;
+   right: 2px;
+   top: 6px;
+   border: none;
+   background-color: transparent;
+   display: none;
+}
+
+.tutorial-filter-container button:hover {
+   color: #602020;
+}
+
+/** Code blocks surrounded by this will receive some utility buttons as well
+  * as an area to show the name of the file that should hold the actual code.
+  */
+.cblock-container {
+   display: block;
+   position: relative;
+   background-color: #a0a0a0;
+   border-radius: 8px 8px .3em .3em;
+   border: 1px solid #602020;
+   border-bottom: none;
+   margin: 10px;
+   padding-top: 1px;
+}
+
+.cblock-bar {
+   position: absolute;
+   right: 15px;
+   top: 10px;
+   font-size: 13px;
+}
+
+.cblock-bar button {
+   background-color: #602020;
+   color: #c0c0c0;
+   cursor: pointer;
+   outline: none;
+   border: none;
+   margin: 2px;
+   border-radius: 4px;
+}
+
+/** Audio player */
+.audio-player {
+   position: relative;
+   border-radius: 8px;
+   border: 1px solid #602020;
+   background-color: #2e2e2e;
+   color: #c0c0c0;
+   margin: 8px;
+
+   width: 330px;
+   height: 64px;
+
+   display: block;
+   margin-left: auto;
+   margin-right: auto;
+   text-align: center;
+}
+
+.audio-player p {
+   position: absolute;
+   margin: 0;
+   font-size: 11px;
+}
+
+.icon-button {
+   width: 28px;
+   height: 28px;
+   margin: 0;
+   padding: 0;
+   background-color: transparent;
+   border: none;
+   outline: none;
+}
+
+.icon-button svg {
+   width: 22px;
+   height: 22px;
+   margin: 0;
+   fill: #5e5e5e;
+}
+
+.icon-button:hover svg {
+   fill: #602020;
+}
+
+.progress-bar {
+   height: 12px;
+   position: relative;
+   background-color: #5e5e5e;
+   border-radius: 8px;
+   border: 1px solid #d0d0d0;
+   margin: 8px;
+}
+
+.progress-bar > span {
+   display: block;
+   height: 100%;
+   background-color: #602020;
+   border-radius: 8px;
+   width: 0;
+}

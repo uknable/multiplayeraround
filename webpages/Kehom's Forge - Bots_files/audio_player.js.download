@@ -1,0 +1,315 @@
+"use strict";
+
+// Extract file name from full path
+function getFileName(path) {
+   // The fastest way (according to some answers) to extract the file name from the path is
+   // by using path.split('/').pop().split('/').pop()
+   // However this solution does not take into account the fact that some systems have
+   // different path separators. So, using RegEx in here
+   // This reg: from the beginning '^' take any number of any character '.*' ending with
+   // either '\' or '/'. This will match the actual path but not the file name.
+   const reg = /^.*[\\\/]/;
+   return path.replace(reg, '');
+}
+
+// Gets a time stamp (in seconds) and convert to min:sec, appending a zero in front of the sec if it's smaller than 10
+function formatTimeStamp(seconds) {
+   var min = Math.floor(seconds / 60);
+   var sec = Math.floor(seconds % 60);
+   if (sec < 10) {
+      sec = '0' + sec;
+   } 
+
+   return `${min}:${sec}`;
+}
+
+
+/// Some SVG icons
+// https://css-tricks.com/using-svg/
+function getPlayButtonSVG() {
+   return '<svg width="28" height="28" viewBox="0 0 7.4083 7.4083"> \
+      <g transform="translate(0 -289.59)"> \
+      <path d="m6.7761 293.3c0 0.0715-6.1273 3.6091-6.1892 3.5733-0.061892-0.0357-0.061892-7.111 0-7.1467 0.061892-0.0357 6.1892 3.5019 6.1892 3.5734z" stroke="#d0d0d0" stroke-linejoin="round" stroke-width=".25817" /> \
+      </g></svg>';
+}
+
+function getPauseButtonSVG() {
+   return '<svg width="28" height="28" viewBox="0 0 7.4083 7.4083"> \
+     <g transform="translate(0 -289.59)" stroke="#d0d0d0" stroke-linejoin="round"> \
+     <rect x="1.5875" y="289.86" width="1.5875" height="6.8755" ry=".52733" stroke-width=".27531"/> \
+     <rect x="4.2333" y="289.86" width="1.5875" height="6.8755" ry=".52733" stroke-width=".27531"/> \
+     </g></svg>';
+}
+
+function getStopButtonSVG() {
+   return '<svg width="28" height="28" viewBox="0 0 7.4083 7.4083"> \
+      <g transform="translate(0 -289.59)"> \
+      <path d="m0.52917 290.12v6.35h6.35v-6.35z" stroke="#d0d0d0" stroke-linejoin="round" stroke-width=".26458"/> \
+      </g></svg>';
+}
+
+function getSpeakerSVG() {
+   return '<svg width="28" height="28" viewBox="0 0 7.4083 7.4083"> \
+      <g transform="translate(0 -289.59)" stroke="#d0d0d0"> \
+       <path d="m2.1167 291.71v3.175h-1.5875v-3.175z" stroke-linejoin="round" stroke-width=".26458"/> \
+       <path d="m2.1167 291.71 1.5875-1.5875v6.35l-1.5875-1.5875z" stroke-linejoin="round" stroke-width=".26458px"/> \
+       <path d="m3.7042 292.5c0.52917 0.52916 0.52917 1.0583 0 1.5875z" stroke-linejoin="round" stroke-width=".26458"/> \
+       <g fill="none" stroke-width=".26458px"> \
+        <path d="m5.0271 292.24c0.52917 0.52917 0.52917 1.5875 0 2.1167"/> \
+        <path d="m5.5563 291.44c0.79375 1.0583 0.79375 2.6458 0 3.7042"/> \
+        <path d="m6.0854 290.65c1.0583 1.5875 1.0583 3.7042 2e-7 5.2917"/> \
+       </g> \
+      </g></svg>';
+}
+
+function getCrossSVG() {
+   return '<svg width="28" height="28" viewBox="0 0 7.4083 7.4083"> \
+      <g transform="translate(0 -289.59)" fill="#602020"> \
+       <path d="m0.79375 289.99 2.9104 2.9104 2.9104-2.9104 0.39688 0.39688-2.9104 2.9104 2.9104 2.9104-0.39688 0.39688-2.9104-2.9104-2.9104 2.9104-0.39688-0.39688 2.9104-2.9104-2.9104-2.9104z" stroke="#d0d0d0" stroke-linejoin="round" stroke-width=".26458px"/> \
+      </g></svg>';
+}
+
+/// Audio player object - needs progress bar to work.
+/// Will create buttons and overall layout
+/// Some reference: https://www.w3schools.com/tags/ref_av_dom.asp
+class audioPlayer {
+   constructor() {
+      this._audio = null;           // Hold the audio element, non jQuery object
+      this._$btPlay = null;         // The "play" button element, wrapped by jQuery
+      this._$btPause = null;        // The "pause" button element, wrapped by jQuery
+      this._$btStop = null;         // The "stop" button element, wrapped by jQuery
+      this._$btToggleMute = null;   // The "mute/unmute" button element, wrapped by jQuery
+      this._$lblFile = null;        // Text element to display file name, wrapped by jQuery
+      this._$lblDuration = null;    // Text element to display duration, wrapped by jQuery
+      this._$crossIcon = null;      // Image element to display a double cross on top of speaker icon, wrapped by jQuery
+
+      this._progBar = null;         // Progress bar object to control the playback progress
+      this._volBar = null;          // Progress bar object to control volume
+
+      this._durationTxt = '0:00';   // To cache the formatted duration
+      
+      this._readyToPlay = false;    // Flag to be used elsewhere (outside of the class)
+      this._playing = false;        // Flag mostly used when manipulating the playback progress
+      this._cacheVolume = 0;        // Necessary for the mute/unmute
+   }
+
+   // Helper functions
+   _hide($element) {
+      $element.css('display', 'none');
+   }
+
+   _show($element) {
+      $element.css('display', 'block');
+   }
+
+   _buildButton(posX, posY, title, svgFunc) {
+      const style = `position: absolute; top: ${posY}px; left: ${posX}px;`;
+      return `<button class="icon-button" title=${title} style="${style}">${svgFunc()}</button>`;
+   }
+
+   _buildIcon(posX, posY, svgFunc) {
+      const style = `position: absolute; top: ${posY}px; left: ${posX}px; pointer-events: none`;
+      return `<div style="${style}">${svgFunc()}</div>`;
+   }
+
+   _buildBar(posX, posY, width) {
+      const style = `position: absolute; top: ${posY}px; left: ${posX}px; width: ${width}px;`;
+      var pg = new progressBar();
+      pg.createBar(style);
+      return pg;
+   }
+
+
+   _createUIElements() {
+      this._$btPlay = $(this._buildButton(10, 10, 'Play', getPlayButtonSVG));
+      this._$btPause = $(this._buildButton(10, 10, 'Pause', getPauseButtonSVG));
+      this._$btStop = $(this._buildButton(42, 10, 'Stop', getStopButtonSVG));
+      this._$btToggleMute = $(this._buildButton(190, 10, 'Mute/Unmute', getSpeakerSVG));
+      this._$crossIcon = $(this._buildIcon(190, 8, getCrossSVG));
+      
+      this._$lblFile = $(`<p class="no-select" style="top: 6px; left: 76px;">Loading</p>`);
+      this._$lblDuration = $(`<p class="no-select" style="top: 22px; left: 76px;">0:00 / 0:00</p>`);
+
+      this._progBar = this._buildBar(5, 34, 299);
+      this._volBar = this._buildBar(214, 8, 90);
+
+      // Hide some of the UI elements - mostly those that are used to manipulate the audio object
+      this._hide(this._$btPlay);
+      this._hide(this._$btPause);
+      this._hide(this._$btStop);
+      this._hide(this._$btToggleMute);
+      this._hide(this._$crossIcon);
+
+      this._hide(this._progBar.getContainer());
+      this._hide(this._volBar.getContainer());
+   }
+
+   _appendUI(element) {
+      element.append(this._$btPlay);
+      element.append(this._$btPause);
+      element.append(this._$btStop);
+      element.append(this._$btToggleMute);
+      element.append(this._$crossIcon);
+
+      element.append(this._$lblFile);
+      element.append(this._$lblDuration);
+
+      element.append(this._progBar.getContainer());
+      element.append(this._volBar.getContainer());
+   }
+
+   // Event handlers
+   _onAudioLoaded() {
+      this._durationTxt = formatTimeStamp(this._audio.duration);
+      this._$lblFile.text(getFileName(this._audio.currentSrc));
+      this._$lblDuration.text(`0:00 / ${this._durationTxt}`);
+
+      // Display the hidden elements - not the pause button
+      this._show(this._$btPlay);
+      this._show(this._$btStop);
+      this._show(this._$btToggleMute);
+      this._show(this._progBar.getContainer());
+      this._show(this._volBar.getContainer());
+      
+      this._volBar.setPercent(this._audio.volume);
+
+      this._readyToPlay = true;
+   }
+   
+   _onTimeUpdate() {
+      this._$lblDuration.text(`${formatTimeStamp(this._audio.currentTime)} / ${this._durationTxt}`);
+      this._progBar.setPercent(this._audio.currentTime / this._audio.duration);
+   }
+
+   _onEndPlayback() {
+      this._hide(this._$btPause);
+      this._show(this._$btPlay);
+
+      this._playing = false;
+   }
+
+   _onVolumeChange(percent) {
+      this._audio.volume = percent;
+
+      if (percent === 0) {
+         this._show(this._$crossIcon);
+      } else {
+         this._hide(this._$crossIcon);
+      }
+   }
+
+
+   _onSeeking(percent) {
+      this._audio.pause();
+      this._audio.currentTime = this._audio.duration * percent;
+   }
+
+   _onEndSeeking(percent) {
+      this._audio.currentTime = this._audio.duration * percent;
+
+      if (this._playing) {
+         this._audio.play();
+      }
+   }
+
+   
+   createFromExisting(element) {
+      const $audio = element.children('audio');
+      if (!$audio) { return ;}
+      this._audio = $audio.get(0);
+
+      this._createUIElements();
+      this._appendUI(element);
+
+      const obj = this;
+
+      this._audio.addEventListener('loadeddata', function() {
+         obj._onAudioLoaded();
+      }, false);
+
+      this._audio.addEventListener('timeupdate', function() {
+         obj._onTimeUpdate();
+      }, false);
+
+      this._audio.addEventListener('ended', function() {
+         obj._onEndPlayback();
+      }, false);
+
+      this._$btPlay.on('click', function() {
+         obj.play();
+      });
+
+      this._$btPause.on('click', function() {
+         obj.pause();
+      });
+
+      this._$btStop.on('click', function() {
+         obj.stop();
+      });
+
+      this._$btToggleMute.on('click', function() {
+         obj.toggleMute();
+      });
+      
+      this._volBar.onBarDrag(function(percent) {
+         obj._onVolumeChange(percent);
+      });
+
+      this._progBar.onBarDrag(function(percent) {
+         obj._onSeeking(percent);
+      });
+
+      this._progBar.onDragEnd(function(percent) {
+         obj._onEndSeeking(percent);
+      });
+   }
+
+
+   isReady() { return this._readyToPlay; }
+
+   play() {
+      if (this._audio && !this._playing) {
+         this._playing = true;
+         this._audio.play();
+
+         this._hide(this._$btPlay);
+         this._show(this._$btPause);
+      }
+   }
+
+   pause() {
+      if (this._audio && this._playing) {
+         this._playing = false;
+         this._audio.pause();
+
+         this._hide(this._$btPause);
+         this._show(this._$btPlay);
+      }
+   }
+
+   stop() {
+      if (this._audio) {
+         this._playing = false;
+         this._audio.pause();
+         this._audio.currentTime = 0;
+
+         this._hide(this._$btPause);
+         this._show(this._$btPlay);
+      }
+   }
+
+   toggleMute() {
+      if (this._audio) {
+         if (this._audio.volume > 0) {
+            this._cacheVolume = this._audio.volume;
+
+            this._onVolumeChange(0);
+         } else {
+            //this._audio.volume = this._cacheVolume;
+            this._onVolumeChange(this._cacheVolume);
+         }
+
+         this._volBar.setPercent(this._audio.volume);
+      }
+   }
+}
