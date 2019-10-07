@@ -28,6 +28,7 @@ func _on_player_disconnected(id):
 # Peer trying to connect to server is notified on success
 func _on_connected_to_server():
 	emit_signal("join_success")
+	print("successfully joined")
 
 # Peer trying to connect to server is notified on failure
 func _on_connection_failed():
