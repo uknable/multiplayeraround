@@ -11,5 +11,8 @@ func _on_httpButton_pressed():
 
 func _on_HTTPRequestGetUsers_request_completed(result, response_code, headers, body):
 	var json = JSON.parse(body.get_string_from_utf8())
-	print(json.result)
-	$getUsersResult.set_text(json.result.get('rows'))
+	var jsonResult = json.result.get('info').values()
+	print(jsonResult[3][1])
+	$getUsersResult.set_text(jsonResult[3][1]['name'])
+	
+	
