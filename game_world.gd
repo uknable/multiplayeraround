@@ -1,15 +1,15 @@
 extends Node2D
 
-func _on_HTTPRequest_request_completed(result, response_code, headers, body):
-	var json = JSON.parse(body.get_string_from_utf8())
-	print(json.result)
-
-func _on_httpButton_pressed():
-	$HTTPRequest.request("https://sleepy-sands-19230.herokuapp.com")
-
-func _on_osButton_pressed():
+func _ready():
 	if (OS.has_touchscreen_ui_hint()):
 		$TextEdit.text = "true"
 	else:
 		$TextEdit.text = "false"
-	
+
+func _on_httpButton_pressed():
+	$HTTPRequestGetUsers.request("https://sleepy-sands-19230.herokuapp.com/users")
+
+func _on_HTTPRequestGetUsers_request_completed(result, response_code, headers, body):
+	var json = JSON.parse(body.get_string_from_utf8())
+	print(json.result)
+	$getUsersResult.set_text(json.result.get('rows'))

@@ -1,10 +1,6 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://game_world.gd" type="Script" id=1]
-
-[sub_resource type="GDScript" id=1]
-script/source = "extends Button
-"
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
@@ -14,31 +10,28 @@ margin_left = 148.0
 margin_top = 6.0
 margin_right = 236.0
 margin_bottom = 62.0
-text = "http test"
-script = SubResource( 1 )
+text = "get users"
 
-[node name="HTTPRequest" type="HTTPRequest" parent="."]
-
-[node name="osButton" type="Button" parent="."]
-margin_left = 12.0
-margin_top = 1.0
-margin_right = 97.0
-margin_bottom = 69.0
-text = "os"
+[node name="HTTPRequestGetUsers" type="HTTPRequest" parent="."]
 
 [node name="Label" type="Label" parent="."]
 margin_left = 14.0
 margin_top = 78.0
 margin_right = 78.0
 margin_bottom = 92.0
-text = "The OS is:"
+text = "Has touchscreen?"
 
 [node name="TextEdit" type="TextEdit" parent="."]
-margin_left = 22.0
-margin_top = 103.0
-margin_right = 114.0
-margin_bottom = 143.0
-[connection signal="pressed" from="httpButton" to="." method="_on_Button_pressed"]
+margin_left = 16.0
+margin_top = 97.0
+margin_right = 108.0
+margin_bottom = 137.0
+
+[node name="getUsersResult" type="Label" parent="."]
+margin_left = 148.0
+margin_top = 75.0
+margin_right = 451.0
+margin_bottom = 215.0
 [connection signal="pressed" from="httpButton" to="." method="_on_httpButton_pressed"]
-[connection signal="request_completed" from="HTTPRequest" to="." method="_on_HTTPRequest_request_completed"]
-[connection signal="pressed" from="osButton" to="." method="_on_osButton_pressed"]
+[connection signal="pressed" from="httpButton" to="." method="_on_Button_pressed"]
+[connection signal="request_completed" from="HTTPRequestGetUsers" to="." method="_on_HTTPRequestGetUsers_request_completed"]

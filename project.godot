@@ -16,13 +16,8 @@ _global_script_class_icons={
 [application]
 
 config/name="multiplayeraround"
-run/main_scene="res://main_menu.tscn"
+run/main_scene="res://game_world.tscn"
 config/icon="res://icon.png"
-
-[autoload]
-
-gamestate="*res://gamestate.gd"
-network="*res://network.gd"
 
 [rendering]
 
