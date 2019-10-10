@@ -1,0 +1,96 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://board_state.gd" type="Script" id=1]
+[ext_resource path="res://assets/board_0.png" type="Texture" id=2]
+[ext_resource path="res://assets/board_1.png" type="Texture" id=3]
+[ext_resource path="res://assets/board_2.png" type="Texture" id=4]
+[ext_resource path="res://assets/board_3.png" type="Texture" id=5]
+[ext_resource path="res://assets/board_4.png" type="Texture" id=6]
+[ext_resource path="res://assets/board_5.png" type="Texture" id=7]
+
+[sub_resource type="TileSet" id=1]
+0/name = "board_0.png 0"
+0/texture = ExtResource( 2 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 0, 0, 128, 128 )
+0/tile_mode = 0
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shapes = [  ]
+0/z_index = 0
+1/name = "board_1.png 1"
+1/texture = ExtResource( 3 )
+1/tex_offset = Vector2( 0, 0 )
+1/modulate = Color( 1, 1, 1, 1 )
+1/region = Rect2( 0, 0, 128, 128 )
+1/tile_mode = 0
+1/occluder_offset = Vector2( 0, 0 )
+1/navigation_offset = Vector2( 0, 0 )
+1/shapes = [  ]
+1/z_index = 0
+2/name = "board_2.png 2"
+2/texture = ExtResource( 4 )
+2/tex_offset = Vector2( 0, 0 )
+2/modulate = Color( 1, 1, 1, 1 )
+2/region = Rect2( 0, 0, 128, 128 )
+2/tile_mode = 0
+2/occluder_offset = Vector2( 0, 0 )
+2/navigation_offset = Vector2( 0, 0 )
+2/shapes = [  ]
+2/z_index = 0
+3/name = "board_3.png 3"
+3/texture = ExtResource( 5 )
+3/tex_offset = Vector2( 0, 0 )
+3/modulate = Color( 1, 1, 1, 1 )
+3/region = Rect2( 0, 0, 128, 128 )
+3/tile_mode = 0
+3/occluder_offset = Vector2( 0, 0 )
+3/navigation_offset = Vector2( 0, 0 )
+3/shapes = [  ]
+3/z_index = 0
+4/name = "board_4.png 4"
+4/texture = ExtResource( 6 )
+4/tex_offset = Vector2( 0, 0 )
+4/modulate = Color( 1, 1, 1, 1 )
+4/region = Rect2( 0, 0, 128, 128 )
+4/tile_mode = 0
+4/occluder_offset = Vector2( 0, 0 )
+4/navigation_offset = Vector2( 0, 0 )
+4/shapes = [  ]
+4/z_index = 0
+5/name = "board_5.png 5"
+5/texture = ExtResource( 7 )
+5/tex_offset = Vector2( 0, 0 )
+5/modulate = Color( 1, 1, 1, 1 )
+5/region = Rect2( 0, 0, 128, 128 )
+5/tile_mode = 0
+5/occluder_offset = Vector2( 0, 0 )
+5/navigation_offset = Vector2( 0, 0 )
+5/shapes = [  ]
+5/z_index = 0
+
+[node name="BoardState" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="TileMap" type="TileMap" parent="."]
+position = Vector2( 5, 128 )
+scale = Vector2( 1.129, 1 )
+tile_set = SubResource( 1 )
+cell_size = Vector2( 128, 128 )
+format = 1
+tile_data = PoolIntArray( 0, 0, 0, 1, 1, 0, 65536, 2, 0, 65537, 3, 0, 131072, 4, 0, 131073, 5, 0 )
+
+[node name="ChooseATile" type="RichTextLabel" parent="."]
+margin_left = 67.0
+margin_top = 46.0
+margin_right = 262.0
+margin_bottom = 86.0
+text = "Choose a Tile"
+
+[node name="Label" type="Label" parent="."]
+margin_left = 50.0
+margin_top = 560.0
+margin_right = 94.0
+margin_bottom = 574.0
+text = "testing"

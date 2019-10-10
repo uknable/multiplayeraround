@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://welcome.gd" type="Script" id=1]
+
+[node name="Welcome" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+margin_left = 52.2246
+margin_top = 129.819
+margin_right = 255.225
+margin_bottom = 169.819
+text = "Welcome to Visibility Tile Flip!"
+
+[node name="Button" type="Button" parent="."]
+margin_left = 169.05
+margin_top = 397.377
+margin_right = 259.05
+margin_bottom = 461.377
+text = "PLAY"
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
