@@ -9,8 +9,7 @@ func _on_BackButton_pressed():
 func _on_SubmitButton_pressed():
 	var guess = $testAnswer.text
 	if (guess == answer):
-		var 
-		$HTTPRequest.request(
+		$HTTPRequest.request("https://sleepy-sands-19230.herokuapp.com/board_state")
 	pass 
 
 

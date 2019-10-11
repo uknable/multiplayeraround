@@ -94,3 +94,6 @@ margin_top = 560.0
 margin_right = 94.0
 margin_bottom = 574.0
 text = "testing"
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+[connection signal="request_completed" from="HTTPRequest" to="." method="_on_HTTPRequest_request_completed"]
