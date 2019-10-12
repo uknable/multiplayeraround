@@ -19,6 +19,10 @@ config/name="multiplayeraround"
 run/main_scene="res://welcome.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+network="*res://network.gd"
+
 [display]
 
 window/size/width=300
