@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://board_state.gd" type="Script" id=1]
 [ext_resource path="res://assets/board_0.png" type="Texture" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://assets/board_3.png" type="Texture" id=5]
 [ext_resource path="res://assets/board_4.png" type="Texture" id=6]
 [ext_resource path="res://assets/board_5.png" type="Texture" id=7]
+[ext_resource path="res://assets/black.png" type="Texture" id=8]
 
 [sub_resource type="TileSet" id=1]
 0/name = "board_0.png 0"
@@ -69,6 +70,16 @@
 5/navigation_offset = Vector2( 0, 0 )
 5/shapes = [  ]
 5/z_index = 0
+6/name = "black.png 6"
+6/texture = ExtResource( 8 )
+6/tex_offset = Vector2( 0, 0 )
+6/modulate = Color( 1, 1, 1, 1 )
+6/region = Rect2( 0, 0, 128, 128 )
+6/tile_mode = 0
+6/occluder_offset = Vector2( 0, 0 )
+6/navigation_offset = Vector2( 0, 0 )
+6/shapes = [  ]
+6/z_index = 0
 
 [node name="BoardState" type="Node2D"]
 script = ExtResource( 1 )
@@ -79,7 +90,7 @@ scale = Vector2( 1.129, 1 )
 tile_set = SubResource( 1 )
 cell_size = Vector2( 128, 128 )
 format = 1
-tile_data = PoolIntArray( 0, 0, 0, 1, 1, 0, 65536, 2, 0, 65537, 3, 0, 131072, 4, 0, 131073, 5, 0 )
+tile_data = PoolIntArray( 0, 6, 0, 1, 6, 0, 65536, 6, 0, 65537, 6, 0, 131072, 6, 0, 131073, 6, 0 )
 
 [node name="ChooseATile" type="RichTextLabel" parent="."]
 margin_left = 67.0
@@ -94,3 +105,14 @@ margin_top = 560.0
 margin_right = 94.0
 margin_bottom = 574.0
 text = "testing"
+
+[node name="GetBoardState" type="HTTPRequest" parent="."]
+
+[node name="ButtonGetBoardState" type="Button" parent="."]
+margin_left = 40.0
+margin_top = 70.0
+margin_right = 260.0
+margin_bottom = 110.0
+text = "Get Board State"
+[connection signal="request_completed" from="GetBoardState" to="." method="_on_GetBoardState_request_completed"]
+[connection signal="pressed" from="ButtonGetBoardState" to="." method="_on_ButtonGetBoardState_pressed"]
