@@ -1,11 +1,18 @@
 extends Node2D
 
-var puzzle_car = preload("res://.import/puzzle_car.png-4bdaefad055c51c33b48dc3e99b2a3e0.stex")
-var puzzle_lights = preload("res://.import/puzzle_lights.png-41638f92209b4d26bc4614a9b416559a.stex")
-var puzzle_tree = preload("res://.import/puzzle_tree.png-37364b9cd1e713e6c6bbec9119470c59.stex")
+onready var tm = $TileMap
 
 var xPos
 var yPos
+
+const letters = [ 
+	"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+	"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+]
+
+var puzzle_car = preload("res://.import/puzzle_car.png-4bdaefad055c51c33b48dc3e99b2a3e0.stex")
+var puzzle_lights = preload("res://.import/puzzle_lights.png-41638f92209b4d26bc4614a9b416559a.stex")
+var puzzle_tree = preload("res://.import/puzzle_tree.png-37364b9cd1e713e6c6bbec9119470c59.stex")
 var puzzles = { 
 	puzzle_car: "cataracts", 
 	puzzle_lights: "glaucoma", 
@@ -18,6 +25,15 @@ func _ready():
 
 	var puzzleTextures = puzzles.keys()
 	var puzzleTexture = puzzleTextures[randi() % puzzleTextures.size()]
+	print(puzzleTextures[randi() % puzzleTextures.size()])
+	print(puzzleTextures[randi() % puzzleTextures.size()])
+	print(puzzleTextures[randi() % puzzleTextures.size()])
+	print(puzzleTextures[randi() % puzzleTextures.size()])
+	print(puzzleTextures)
+	print(randi() % puzzleTextures.size())
+	print(randi() % puzzleTextures.size())
+	print(randi() % puzzleTextures.size())
+	print(randi() % puzzleTextures.size())
 	$ImpairmentName.text = puzzles.get(puzzleTexture)
 	$PuzzleTexture.set_texture(puzzleTexture)
 

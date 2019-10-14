@@ -301,6 +301,7 @@
 script = ExtResource( 1 )
 
 [node name="TileMap" type="TileMap" parent="."]
+scale = Vector2( 1.2, 1.2 )
 tile_set = SubResource( 1 )
 cell_size = Vector2( 24, 24 )
 cell_half_offset = 0
