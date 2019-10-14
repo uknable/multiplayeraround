@@ -23,7 +23,8 @@ func _process(delta):
 		var mouseLocV = tm.world_to_map(mouseLoc)
 		if(mouseLocV.x >= 0 && mouseLocV.x < 2 && mouseLocV.y >= 1 && mouseLocV.y < 4):
 			print(mouseLocV)
-			network.putRequest(mouseLocV)
+			game_manager.changeIntoPuzzle(mouseLocV)
+			#network.putRequest(mouseLocV)
 
 # for touch input
 func _input(event):
@@ -34,7 +35,8 @@ func _input(event):
 		var touchPosV = tm.world_to_map(touchPos)
 		if(touchPosV.x >= 0 && touchPosV.x < 2 && touchPosV.y >= 1 && touchPosV.y < 4):
 			print(touchPosV)
-			network.putRequest(touchPosV)
+			game_manager.changeIntoPuzzle(touchPosV)
+			#network.putRequest(touchPosV)
 
 func getBoardState():
 	$GetBoardState.request("https://sleepy-sands-19230.herokuapp.com/board_state")

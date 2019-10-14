@@ -16,12 +16,13 @@ _global_script_class_icons={
 [application]
 
 config/name="multiplayeraround"
-run/main_scene="res://welcome.tscn"
+run/main_scene="res://keyboard.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
 network="*res://network.gd"
+game_manager="*res://game_manager.gd"
 
 [display]
 
