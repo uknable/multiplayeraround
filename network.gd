@@ -15,7 +15,7 @@ func putRequest(mouseLocV):
 	
 	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
 	
-	var fields = {"flipped": false, "xPos": xPos, "yPos": yPos }
+	var fields = {"flipped": true, "xPos": xPos, "yPos": yPos }
 	var queryString = http.query_string_from_dict(fields)
 	var headers = ["Content-Type: application/x-www-form-urlencoded"]
 	
