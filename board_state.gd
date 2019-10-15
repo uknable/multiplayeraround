@@ -24,7 +24,6 @@ func _process(delta):
 		if(mouseLocV.x >= 0 && mouseLocV.x < 2 && mouseLocV.y >= 1 && mouseLocV.y < 4):
 			print(mouseLocV)
 			game_manager.changeIntoPuzzle(mouseLocV)
-			#network.putRequest(mouseLocV)
 
 # for touch input
 func _input(event):
@@ -36,7 +35,6 @@ func _input(event):
 		if(touchPosV.x >= 0 && touchPosV.x < 2 && touchPosV.y >= 1 && touchPosV.y < 4):
 			print(touchPosV)
 			game_manager.changeIntoPuzzle(touchPosV)
-			#network.putRequest(touchPosV)
 
 func getBoardState():
 	$GetBoardState.request("https://sleepy-sands-19230.herokuapp.com/board_state")
@@ -56,8 +54,25 @@ func _on_GetBoardState_request_completed(result, response_code, headers, body):
 			tm.set_cellv(
 			Vector2(flippedTile[0], flippedTile[1]), 
 			tileCoords.get(flippedTile)
-		) 
+		)
+	
+	checkIfCompleted(board_state)
 
 
 func _on_ButtonGetBoardState_pressed():
 	getBoardState()
+
+func checkIfCompleted(board_state):
+	print("checking if completed")
+
+	var tilesFlipStates = []
+	for row in board_state:
+		tilesFlipStates.append(row.flipped)
+	
+	var allFlipped = tilesFlipStates.has(false)
+	
+	print(allFlipped)
+	
+	if (allFlipped == false):
+		print("switching to facts scene")
+		get_tree().change_scene("res://facts_scene.tscn")

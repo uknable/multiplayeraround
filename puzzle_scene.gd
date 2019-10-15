@@ -28,7 +28,7 @@ var puzzles = {
 		"puzzle_tree": [
 			"tree",
 			"retinography",
-			puzzle_tree_texture 
+			puzzle_tree_texture
 		]
 }
 
@@ -97,3 +97,7 @@ func _on_SolveButton_pressed():
 		print("incorrect")
 		$StateLabel.text = "Incorrect try again."
 
+
+
+func _on_ClearTextButton_pressed():
+	$TextEdit.text = ""

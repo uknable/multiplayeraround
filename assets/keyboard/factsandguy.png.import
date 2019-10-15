@@ -2,16 +2,11 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Q.png-68e4287d3bb4189f9f447b9e90a1324c.stex"
-metadata={
-"vram_texture": false
-}
+valid=false
 
 [deps]
 
-source_file="res://assets/keyboard/Q.png"
-dest_files=[ "res://.import/Q.png-68e4287d3bb4189f9f447b9e90a1324c.stex" ]
-
+source_file="res://assets/keyboard/factsandguy.png"
 [params]
 
 compress/mode=0

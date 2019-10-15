@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/C.png-6f50489f9051ff058ca1ff8140a31043.stex"
+path="res://.import/puzzle_car_solved.png-02525a6f5ef6e6ca5b82452c85018aad.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/keyboard/C.png"
-dest_files=[ "res://.import/C.png-6f50489f9051ff058ca1ff8140a31043.stex" ]
+source_file="res://assets/puzzle_car_solved.png"
+dest_files=[ "res://.import/puzzle_car_solved.png-02525a6f5ef6e6ca5b82452c85018aad.stex" ]
 
 [params]
 
