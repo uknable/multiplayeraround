@@ -13,8 +13,19 @@ var tileCoords = {
 	[1,2]: 5
 }
 
+var _timer = null
+
 func _ready():
 	getBoardState()
+
+	_timer = Timer.new()
+	add_child(_timer)
+
+	_timer.connect("timeout", self, "_on_Timer_timeout")
+	_timer.set_wait_time(2.0)
+	_timer.set_one_shot(false)
+	_timer.start()
+
 
 #for mouse input
 func _process(delta):
@@ -36,14 +47,16 @@ func _input(event):
 			print(touchPosV)
 			game_manager.changeIntoPuzzle(touchPosV)
 
+func _on_Timer_timeout():
+	getBoardState()
+
 func getBoardState():
 	$GetBoardState.request("https://sleepy-sands-19230.herokuapp.com/board_state")
+	$Label.text = "Loading..."
 
 func _on_GetBoardState_request_completed(result, response_code, headers, body):
 	var json = JSON.parse(body.get_string_from_utf8())
 	var board_state = json.result.get('info')
-	
-	print("Got Board State")
 
 	for row in board_state:
 		# tile in row is an Array of Float(Real)
@@ -55,12 +68,14 @@ func _on_GetBoardState_request_completed(result, response_code, headers, body):
 			Vector2(flippedTile[0], flippedTile[1]), 
 			tileCoords.get(flippedTile)
 		)
-	
+	$Label.text = "Got board state."
+		
+	getTileProgress()
 	checkIfCompleted(board_state)
 
-
-func _on_ButtonGetBoardState_pressed():
-	getBoardState()
+func getTileProgress():
+	
+	pass
 
 func checkIfCompleted(board_state):
 	print("checking if completed")

@@ -108,11 +108,139 @@ text = "testing"
 
 [node name="GetBoardState" type="HTTPRequest" parent="."]
 
-[node name="ButtonGetBoardState" type="Button" parent="."]
+[node name="ProgressIndicators" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="Tile0" type="Control" parent="ProgressIndicators"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="ProgressIndicators/Tile0"]
+margin_left = 5.0
+margin_top = 128.0
+margin_right = 40.0
+margin_bottom = 138.0
+
+[node name="ColorRect2" type="ColorRect" parent="ProgressIndicators/Tile0"]
 margin_left = 40.0
-margin_top = 70.0
-margin_right = 260.0
-margin_bottom = 110.0
-text = "Get Board State"
+margin_top = 128.0
+margin_right = 75.0
+margin_bottom = 138.0
+
+[node name="ColorRect3" type="ColorRect" parent="ProgressIndicators/Tile0"]
+margin_left = 75.0
+margin_top = 128.0
+margin_right = 110.0
+margin_bottom = 138.0
+
+[node name="Tile1" type="Control" parent="ProgressIndicators"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="ColorRect4" type="ColorRect" parent="ProgressIndicators/Tile1"]
+margin_left = 170.0
+margin_top = 128.0
+margin_right = 205.0
+margin_bottom = 138.0
+
+[node name="ColorRect5" type="ColorRect" parent="ProgressIndicators/Tile1"]
+margin_left = 205.0
+margin_top = 128.0
+margin_right = 240.0
+margin_bottom = 138.0
+
+[node name="ColorRect6" type="ColorRect" parent="ProgressIndicators/Tile1"]
+margin_left = 240.0
+margin_top = 128.0
+margin_right = 275.0
+margin_bottom = 138.0
+
+[node name="Tile2" type="Control" parent="ProgressIndicators"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="ColorRect9" type="ColorRect" parent="ProgressIndicators/Tile2"]
+margin_left = 5.0
+margin_top = 300.0
+margin_right = 40.0
+margin_bottom = 310.0
+
+[node name="ColorRect8" type="ColorRect" parent="ProgressIndicators/Tile2"]
+margin_left = 40.0
+margin_top = 300.0
+margin_right = 75.0
+margin_bottom = 310.0
+
+[node name="ColorRect7" type="ColorRect" parent="ProgressIndicators/Tile2"]
+margin_left = 75.0
+margin_top = 300.0
+margin_right = 110.0
+margin_bottom = 310.0
+
+[node name="Tile3" type="Control" parent="ProgressIndicators"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="ColorRect12" type="ColorRect" parent="ProgressIndicators/Tile3"]
+margin_left = 170.0
+margin_top = 300.0
+margin_right = 205.0
+margin_bottom = 310.0
+
+[node name="ColorRect11" type="ColorRect" parent="ProgressIndicators/Tile3"]
+margin_left = 205.0
+margin_top = 300.0
+margin_right = 240.0
+margin_bottom = 310.0
+
+[node name="ColorRect10" type="ColorRect" parent="ProgressIndicators/Tile3"]
+margin_left = 240.0
+margin_top = 300.0
+margin_right = 275.0
+margin_bottom = 310.0
+
+[node name="Tile4" type="Control" parent="ProgressIndicators"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="ColorRect12" type="ColorRect" parent="ProgressIndicators/Tile4"]
+margin_left = 5.0
+margin_top = 450.0
+margin_right = 40.0
+margin_bottom = 460.0
+
+[node name="ColorRect11" type="ColorRect" parent="ProgressIndicators/Tile4"]
+margin_left = 40.0
+margin_top = 450.0
+margin_right = 75.0
+margin_bottom = 460.0
+
+[node name="ColorRect10" type="ColorRect" parent="ProgressIndicators/Tile4"]
+margin_left = 75.0
+margin_top = 450.0
+margin_right = 110.0
+margin_bottom = 460.0
+
+[node name="Tile5" type="Control" parent="ProgressIndicators"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="ColorRect13" type="ColorRect" parent="ProgressIndicators/Tile5"]
+margin_left = 170.0
+margin_top = 450.0
+margin_right = 205.0
+margin_bottom = 460.0
+
+[node name="ColorRect15" type="ColorRect" parent="ProgressIndicators/Tile5"]
+margin_left = 205.0
+margin_top = 450.0
+margin_right = 240.0
+margin_bottom = 460.0
+
+[node name="ColorRect14" type="ColorRect" parent="ProgressIndicators/Tile5"]
+margin_left = 240.0
+margin_top = 450.0
+margin_right = 275.0
+margin_bottom = 460.0
 [connection signal="request_completed" from="GetBoardState" to="." method="_on_GetBoardState_request_completed"]
-[connection signal="pressed" from="ButtonGetBoardState" to="." method="_on_ButtonGetBoardState_pressed"]
