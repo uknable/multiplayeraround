@@ -97,7 +97,5 @@ func _on_SolveButton_pressed():
 		print("incorrect")
 		$StateLabel.text = "Incorrect try again."
 
-
-
 func _on_ClearTextButton_pressed():
 	$TextEdit.text = ""

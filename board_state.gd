@@ -48,8 +48,8 @@ func _process(delta):
 		var mouseLocV = btm.world_to_map(mouseLoc)
 		var mouseLocVptm = ptm.world_to_map(mouseLoc)
 		print(mouseLocVptm)
-		# if(mouseLocV.x >= 0 && mouseLocV.x < 2 && mouseLocV.y >= 1 && mouseLocV.y < 4):
-		# 	game_manager.changeIntoPuzzle(mouseLocV)
+		if(mouseLocV.x >= 0 && mouseLocV.x < 2 && mouseLocV.y >= 1 && mouseLocV.y < 4):
+			game_manager.changeIntoPuzzle(mouseLocV)
 
 # for touch input
 func _input(event):
@@ -87,8 +87,18 @@ func _on_GetBoardState_request_completed(result, response_code, headers, body):
 		# update progress indicator
 		var tile = [int(row.tile[0]), int(row.tile[1])]
 		var tileProgress = tileProgressCoords.get(tile)
+
+		#update ticksSolved in game_manager
+		print(game_manager.ticksSolved)
+		game_manager.ticksSolved.erase(tile)
+		game_manager.ticksSolved[tile] = row.solved
+		
+		print(game_manager.ticksSolved)
+		print("updated ticksSolved")
+
 		# color solved indicator
 		for i in range(0, row.solved):
+			
 			ptm.set_cellv(
 				tileProgress[i],
 				0
