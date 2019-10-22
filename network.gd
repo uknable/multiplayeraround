@@ -1,6 +1,8 @@
 extends Node
 
-# func updateInProgress(mouseLocV):
+
+
+# func updateProgress(tileVec):
 # 	var http = HTTPClient.new()
 # 	var err = http.connect_to_host("sleepy-sands-19230.herokuapp.com")
 # 	assert(err == OK)
@@ -12,6 +14,8 @@ extends Node
 	
 # 	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
 	
+# 	var solved = game_manager.ticksSolved[]
+
 # 	var fields = {"flipped": true, "xPos": xPos, "yPos": yPos }
 # 	var queryString = http.query_string_from_dict(fields)
 # 	var headers = ["Content-Type: application/x-www-form-urlencoded"]
