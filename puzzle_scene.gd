@@ -5,6 +5,7 @@ onready var tm = $KeyboardTileMap
 var xPos
 var yPos
 
+const SCENE_DELAY = 2.0
 const letters = [ 
 	"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
 	"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
@@ -33,6 +34,8 @@ var puzzles = {
 }
 
 var puzzle
+
+
 
 func _ready():
 	xPos = game_manager.xPos # if answer is correct, game manager flips tile
@@ -86,16 +89,22 @@ func _input(event):
 func _on_BackButton_pressed():
 	get_tree().change_scene("res://board_state.tscn")
 
+func _on_ClearTextButton_pressed():
+	$TextEdit.text = ""
 
-func _on_SolveButton_pressed():
+
+func _on_SubmitButton_pressed():
 	if ($TextEdit.text.to_lower() == puzzle[0]):
-		$StateLabel.text = "Solved! Taking you back to the board..."
+		$WhatIsLabel.text = puzzle[0].to_upper()
 		print("Solved")
+		$Feedback.show()
+		$SubmitButton.hide()
 		network.putRequest(Vector2(xPos, yPos))
-		get_tree().change_scene("res://board_state.tscn")
+		
 	else:
 		print("incorrect")
 		$StateLabel.text = "Incorrect try again."
 
-func _on_ClearTextButton_pressed():
-	$TextEdit.text = ""
+
+func _on_ReturnToBoardButton_pressed():
+	get_tree().change_scene("res://board_state.tscn")

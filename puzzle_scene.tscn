@@ -1,12 +1,20 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://puzzle_scene.gd" type="Script" id=1]
 [ext_resource path="res://assets/black.png" type="Texture" id=2]
-[ext_resource path="res://assets/keyboard/keyboard2.png" type="Texture" id=3]
+[ext_resource path="res://assets/Noto_Sans/noto_sans_regular_16.tres" type="DynamicFont" id=3]
+[ext_resource path="res://assets/back_icon.png" type="Texture" id=4]
+[ext_resource path="res://assets/keyboard/keyboard2.png" type="Texture" id=5]
+[ext_resource path="res://assets/line_input.png" type="Texture" id=6]
+[ext_resource path="res://assets/Noto_Sans/noto_sans_regular_12.tres" type="DynamicFont" id=7]
+[ext_resource path="res://assets/progress_solved.png" type="Texture" id=8]
+[ext_resource path="res://assets/Noto_Sans/noto_sans_bold_22.tres" type="DynamicFont" id=9]
+[ext_resource path="res://assets/return_button.png" type="Texture" id=10]
+[ext_resource path="res://assets/submit_button.png" type="Texture" id=11]
 
 [sub_resource type="TileSet" id=1]
 0/name = "keyboard2.png 0"
-0/texture = ExtResource( 3 )
+0/texture = ExtResource( 5 )
 0/tex_offset = Vector2( 0, 0 )
 0/modulate = Color( 1, 1, 1, 1 )
 0/region = Rect2( 0, 0, 24, 24 )
@@ -16,7 +24,7 @@
 0/shapes = [  ]
 0/z_index = 0
 1/name = "keyboard2.png 1"
-1/texture = ExtResource( 3 )
+1/texture = ExtResource( 5 )
 1/tex_offset = Vector2( 0, 0 )
 1/modulate = Color( 1, 1, 1, 1 )
 1/region = Rect2( 24, 0, 24, 24 )
@@ -26,7 +34,7 @@
 1/shapes = [  ]
 1/z_index = 0
 2/name = "keyboard2.png 2"
-2/texture = ExtResource( 3 )
+2/texture = ExtResource( 5 )
 2/tex_offset = Vector2( 0, 0 )
 2/modulate = Color( 1, 1, 1, 1 )
 2/region = Rect2( 48, 0, 24, 24 )
@@ -36,7 +44,7 @@
 2/shapes = [  ]
 2/z_index = 0
 3/name = "keyboard2.png 3"
-3/texture = ExtResource( 3 )
+3/texture = ExtResource( 5 )
 3/tex_offset = Vector2( 0, 0 )
 3/modulate = Color( 1, 1, 1, 1 )
 3/region = Rect2( 72, 0, 24, 24 )
@@ -46,7 +54,7 @@
 3/shapes = [  ]
 3/z_index = 0
 4/name = "keyboard2.png 4"
-4/texture = ExtResource( 3 )
+4/texture = ExtResource( 5 )
 4/tex_offset = Vector2( 0, 0 )
 4/modulate = Color( 1, 1, 1, 1 )
 4/region = Rect2( 96, 0, 24, 24 )
@@ -56,7 +64,7 @@
 4/shapes = [  ]
 4/z_index = 0
 5/name = "keyboard2.png 5"
-5/texture = ExtResource( 3 )
+5/texture = ExtResource( 5 )
 5/tex_offset = Vector2( 0, 0 )
 5/modulate = Color( 1, 1, 1, 1 )
 5/region = Rect2( 120, 0, 24, 24 )
@@ -66,7 +74,7 @@
 5/shapes = [  ]
 5/z_index = 0
 6/name = "keyboard2.png 6"
-6/texture = ExtResource( 3 )
+6/texture = ExtResource( 5 )
 6/tex_offset = Vector2( 0, 0 )
 6/modulate = Color( 1, 1, 1, 1 )
 6/region = Rect2( 144, 0, 24, 24 )
@@ -76,7 +84,7 @@
 6/shapes = [  ]
 6/z_index = 0
 7/name = "keyboard2.png 7"
-7/texture = ExtResource( 3 )
+7/texture = ExtResource( 5 )
 7/tex_offset = Vector2( 0, 0 )
 7/modulate = Color( 1, 1, 1, 1 )
 7/region = Rect2( 168, 0, 24, 24 )
@@ -86,7 +94,7 @@
 7/shapes = [  ]
 7/z_index = 0
 8/name = "keyboard2.png 8"
-8/texture = ExtResource( 3 )
+8/texture = ExtResource( 5 )
 8/tex_offset = Vector2( 0, 0 )
 8/modulate = Color( 1, 1, 1, 1 )
 8/region = Rect2( 192, 0, 24, 24 )
@@ -96,7 +104,7 @@
 8/shapes = [  ]
 8/z_index = 0
 9/name = "keyboard2.png 9"
-9/texture = ExtResource( 3 )
+9/texture = ExtResource( 5 )
 9/tex_offset = Vector2( 0, 0 )
 9/modulate = Color( 1, 1, 1, 1 )
 9/region = Rect2( 216, 0, 24, 24 )
@@ -106,7 +114,7 @@
 9/shapes = [  ]
 9/z_index = 0
 10/name = "keyboard2.png 10"
-10/texture = ExtResource( 3 )
+10/texture = ExtResource( 5 )
 10/tex_offset = Vector2( 0, 0 )
 10/modulate = Color( 1, 1, 1, 1 )
 10/region = Rect2( 240, 0, 24, 24 )
@@ -116,7 +124,7 @@
 10/shapes = [  ]
 10/z_index = 0
 11/name = "keyboard2.png 11"
-11/texture = ExtResource( 3 )
+11/texture = ExtResource( 5 )
 11/tex_offset = Vector2( 0, 0 )
 11/modulate = Color( 1, 1, 1, 1 )
 11/region = Rect2( 264, 0, 24, 24 )
@@ -126,7 +134,7 @@
 11/shapes = [  ]
 11/z_index = 0
 12/name = "keyboard2.png 12"
-12/texture = ExtResource( 3 )
+12/texture = ExtResource( 5 )
 12/tex_offset = Vector2( 0, 0 )
 12/modulate = Color( 1, 1, 1, 1 )
 12/region = Rect2( 288, 0, 24, 24 )
@@ -136,7 +144,7 @@
 12/shapes = [  ]
 12/z_index = 0
 13/name = "keyboard2.png 13"
-13/texture = ExtResource( 3 )
+13/texture = ExtResource( 5 )
 13/tex_offset = Vector2( 0, 0 )
 13/modulate = Color( 1, 1, 1, 1 )
 13/region = Rect2( 0, 24, 24, 24 )
@@ -146,7 +154,7 @@
 13/shapes = [  ]
 13/z_index = 0
 14/name = "keyboard2.png 14"
-14/texture = ExtResource( 3 )
+14/texture = ExtResource( 5 )
 14/tex_offset = Vector2( 0, 0 )
 14/modulate = Color( 1, 1, 1, 1 )
 14/region = Rect2( 24, 24, 24, 24 )
@@ -156,7 +164,7 @@
 14/shapes = [  ]
 14/z_index = 0
 15/name = "keyboard2.png 15"
-15/texture = ExtResource( 3 )
+15/texture = ExtResource( 5 )
 15/tex_offset = Vector2( 0, 0 )
 15/modulate = Color( 1, 1, 1, 1 )
 15/region = Rect2( 48, 24, 24, 24 )
@@ -166,7 +174,7 @@
 15/shapes = [  ]
 15/z_index = 0
 16/name = "keyboard2.png 16"
-16/texture = ExtResource( 3 )
+16/texture = ExtResource( 5 )
 16/tex_offset = Vector2( 0, 0 )
 16/modulate = Color( 1, 1, 1, 1 )
 16/region = Rect2( 72, 24, 24, 24 )
@@ -176,7 +184,7 @@
 16/shapes = [  ]
 16/z_index = 0
 17/name = "keyboard2.png 17"
-17/texture = ExtResource( 3 )
+17/texture = ExtResource( 5 )
 17/tex_offset = Vector2( 0, 0 )
 17/modulate = Color( 1, 1, 1, 1 )
 17/region = Rect2( 96, 24, 24, 24 )
@@ -186,7 +194,7 @@
 17/shapes = [  ]
 17/z_index = 0
 18/name = "keyboard2.png 18"
-18/texture = ExtResource( 3 )
+18/texture = ExtResource( 5 )
 18/tex_offset = Vector2( 0, 0 )
 18/modulate = Color( 1, 1, 1, 1 )
 18/region = Rect2( 120, 24, 24, 24 )
@@ -196,7 +204,7 @@
 18/shapes = [  ]
 18/z_index = 0
 19/name = "keyboard2.png 19"
-19/texture = ExtResource( 3 )
+19/texture = ExtResource( 5 )
 19/tex_offset = Vector2( 0, 0 )
 19/modulate = Color( 1, 1, 1, 1 )
 19/region = Rect2( 144, 24, 24, 24 )
@@ -206,7 +214,7 @@
 19/shapes = [  ]
 19/z_index = 0
 20/name = "keyboard2.png 20"
-20/texture = ExtResource( 3 )
+20/texture = ExtResource( 5 )
 20/tex_offset = Vector2( 0, 0 )
 20/modulate = Color( 1, 1, 1, 1 )
 20/region = Rect2( 168, 24, 24, 24 )
@@ -216,7 +224,7 @@
 20/shapes = [  ]
 20/z_index = 0
 21/name = "keyboard2.png 21"
-21/texture = ExtResource( 3 )
+21/texture = ExtResource( 5 )
 21/tex_offset = Vector2( 0, 0 )
 21/modulate = Color( 1, 1, 1, 1 )
 21/region = Rect2( 192, 24, 24, 24 )
@@ -226,7 +234,7 @@
 21/shapes = [  ]
 21/z_index = 0
 22/name = "keyboard2.png 22"
-22/texture = ExtResource( 3 )
+22/texture = ExtResource( 5 )
 22/tex_offset = Vector2( 0, 0 )
 22/modulate = Color( 1, 1, 1, 1 )
 22/region = Rect2( 216, 24, 24, 24 )
@@ -236,7 +244,7 @@
 22/shapes = [  ]
 22/z_index = 0
 23/name = "keyboard2.png 23"
-23/texture = ExtResource( 3 )
+23/texture = ExtResource( 5 )
 23/tex_offset = Vector2( 0, 0 )
 23/modulate = Color( 1, 1, 1, 1 )
 23/region = Rect2( 240, 24, 24, 24 )
@@ -246,7 +254,7 @@
 23/shapes = [  ]
 23/z_index = 0
 24/name = "keyboard2.png 24"
-24/texture = ExtResource( 3 )
+24/texture = ExtResource( 5 )
 24/tex_offset = Vector2( 0, 0 )
 24/modulate = Color( 1, 1, 1, 1 )
 24/region = Rect2( 264, 24, 24, 24 )
@@ -256,7 +264,7 @@
 24/shapes = [  ]
 24/z_index = 0
 25/name = "keyboard2.png 25"
-25/texture = ExtResource( 3 )
+25/texture = ExtResource( 5 )
 25/tex_offset = Vector2( 0, 0 )
 25/modulate = Color( 1, 1, 1, 1 )
 25/region = Rect2( 288, 24, 24, 24 )
@@ -266,7 +274,7 @@
 25/shapes = [  ]
 25/z_index = 0
 26/name = "keyboard2.png 26"
-26/texture = ExtResource( 3 )
+26/texture = ExtResource( 5 )
 26/tex_offset = Vector2( 0, 0 )
 26/modulate = Color( 1, 1, 1, 1 )
 26/region = Rect2( 0, 48, 48, 24 )
@@ -282,7 +290,7 @@
 26/shapes = [  ]
 26/z_index = 0
 27/name = "keyboard2.png 27"
-27/texture = ExtResource( 3 )
+27/texture = ExtResource( 5 )
 27/tex_offset = Vector2( 0, 0 )
 27/modulate = Color( 1, 1, 1, 1 )
 27/region = Rect2( 48, 48, 96, 24 )
@@ -298,6 +306,8 @@
 27/shapes = [  ]
 27/z_index = 0
 
+[sub_resource type="StyleBoxTexture" id=2]
+
 [node name="PuzzleScene" type="Node2D"]
 script = ExtResource( 1 )
 
@@ -309,39 +319,36 @@ texture = ExtResource( 2 )
 expand = true
 
 [node name="HeaderCopy" type="RichTextLabel" parent="."]
-margin_left = 60.0
-margin_top = 90.0
-margin_right = 250.0
-margin_bottom = 120.0
+margin_left = 41.0
+margin_top = 92.0
+margin_right = 278.0
+margin_bottom = 122.0
+custom_fonts/normal_font = ExtResource( 3 )
 text = "Perspective of someone with"
 
+[node name="Heading" type="RichTextLabel" parent="."]
+margin_left = 77.0
+margin_top = 22.0
+margin_right = 248.0
+margin_bottom = 52.0
+custom_fonts/normal_font = ExtResource( 3 )
+text = "Types of Impairment"
+
 [node name="ImpairmentName" type="RichTextLabel" parent="."]
-margin_left = 90.0
-margin_top = 120.0
-margin_right = 220.0
-margin_bottom = 150.0
+margin_left = 100.0
+margin_top = 119.0
+margin_right = 245.0
+margin_bottom = 149.0
+custom_fonts/normal_font = ExtResource( 3 )
 text = "*impairment*"
 
-[node name="TextEdit" type="LineEdit" parent="."]
-margin_left = 10.0
-margin_top = 390.0
-margin_right = 210.0
-margin_bottom = 420.0
-text = "Enter answer here"
-
-[node name="SolveButton" type="Button" parent="."]
-margin_left = 100.0
-margin_top = 540.0
-margin_right = 196.0
-margin_bottom = 590.0
-text = "Solve!"
-
-[node name="BackButton" type="Button" parent="."]
-margin_left = 20.0
-margin_top = 20.0
-margin_right = 80.0
-margin_bottom = 60.0
-text = "Back"
+[node name="BackButton" type="TextureButton" parent="."]
+margin_left = 17.0
+margin_top = 19.0
+margin_right = 45.0
+margin_bottom = 47.0
+texture_normal = ExtResource( 4 )
+expand = true
 
 [node name="KeyboardTileMap" type="TileMap" parent="."]
 tile_set = SubResource( 1 )
@@ -353,21 +360,71 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="StateLabel" type="Label" parent="."]
-margin_left = 80.0
-margin_top = 360.0
-margin_right = 206.0
-margin_bottom = 374.0
+[node name="WhatIsLabel" type="Label" parent="."]
+margin_left = 77.0
+margin_top = 353.0
+margin_right = 224.0
+margin_bottom = 376.0
+custom_fonts/font = ExtResource( 3 )
 text = "What is this object?"
+align = 1
 
-[node name="ClearTextButton" type="Button" parent="."]
-margin_left = 220.0
+[node name="TextEditTex" type="TextureRect" parent="."]
+margin_left = 15.0
+margin_top = 389.0
+margin_right = 288.0
+margin_bottom = 422.0
+texture = ExtResource( 6 )
+expand = true
+
+[node name="TextEdit" type="LineEdit" parent="."]
+margin_left = 31.0
 margin_top = 390.0
-margin_right = 293.0
+margin_right = 264.0
 margin_bottom = 420.0
-text = "Clear text"
+custom_styles/normal = SubResource( 2 )
+custom_fonts/font = ExtResource( 7 )
+clear_button_enabled = true
+placeholder_text = "Enter answer here"
+
+[node name="Feedback" type="Node2D" parent="."]
+visible = false
+
+[node name="FeedbackColour" type="TextureRect" parent="Feedback"]
+margin_top = 389.0
+margin_right = 300.0
+margin_bottom = 530.0
+texture = ExtResource( 8 )
+stretch_mode = 1
+
+[node name="FeedbackText" type="RichTextLabel" parent="Feedback"]
+margin_left = 90.0
+margin_top = 440.0
+margin_right = 210.0
+margin_bottom = 470.0
+custom_fonts/bold_font = ExtResource( 9 )
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+bbcode_enabled = true
+bbcode_text = "[b]CORRECT![b]"
+text = "CORRECT!"
+scroll_active = false
+
+[node name="ReturnToBoardButton" type="TextureButton" parent="Feedback"]
+margin_left = 90.0
+margin_top = 540.0
+margin_right = 216.0
+margin_bottom = 580.0
+texture_normal = ExtResource( 10 )
+expand = true
+
+[node name="SubmitButton" type="TextureButton" parent="."]
+margin_left = 90.0
+margin_top = 540.0
+margin_right = 216.0
+margin_bottom = 580.0
+texture_normal = ExtResource( 11 )
+expand = true
 [connection signal="focus_entered" from="TextEdit" to="." method="_on_TextEdit_focus_entered"]
 [connection signal="focus_exited" from="TextEdit" to="." method="_on_TextEdit_focus_exited"]
-[connection signal="pressed" from="SolveButton" to="." method="_on_SolveButton_pressed"]
-[connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
-[connection signal="pressed" from="ClearTextButton" to="." method="_on_ClearTextButton_pressed"]
+[connection signal="pressed" from="Feedback/ReturnToBoardButton" to="." method="_on_ReturnToBoardButton_pressed"]
+[connection signal="pressed" from="SubmitButton" to="." method="_on_SubmitButton_pressed"]
