@@ -46,10 +46,10 @@ func _process(delta):
 	if (Input.is_action_just_pressed("ui_click")):
 		var mouseLoc = get_global_mouse_position()
 		var mouseLocV = btm.world_to_map(mouseLoc)
-		var mouseLocVptm = ptm.world_to_map(mouseLoc)
-		print(mouseLocVptm)
+		print(btm.get_cellv(mouseLocV))
 		if(mouseLocV.x >= 0 && mouseLocV.x < 2 && mouseLocV.y >= 1 && mouseLocV.y < 4):
-			game_manager.changeIntoPuzzle(mouseLocV)
+			if(btm.get_cellv(mouseLocV) == 6):
+				game_manager.changeIntoPuzzle(mouseLocV)
 
 # for touch input
 func _input(event):
@@ -59,7 +59,8 @@ func _input(event):
 		var touchPos = get_canvas_transform().xform_inv(event.position)
 		var touchPosV = btm.world_to_map(touchPos)
 		if(touchPosV.x >= 0 && touchPosV.x < 2 && touchPosV.y >= 1 && touchPosV.y < 4):
-			game_manager.changeIntoPuzzle(touchPosV)
+			if(btm.get_cellv(touchPosV) == 6):
+				game_manager.changeIntoPuzzle(touchPosV)
 
 func _on_Timer_timeout():
 	getBoardState()
@@ -77,13 +78,6 @@ func _on_GetBoardState_request_completed(result, response_code, headers, body):
 		# tile in row is an Array of Float(Real)
 		# change to Array of Int to use for tileCoords
 		
-		if(row.flipped): # Checking which tile is flipped
-			var flippedTile = [int(row.tile[0]), int(row.tile[1])]
-			btm.set_cellv(
-				Vector2(flippedTile[0], flippedTile[1]), 
-				tileCoords.get(flippedTile)
-			)
-
 		# update progress indicator
 		var tile = [int(row.tile[0]), int(row.tile[1])]
 		var tileProgress = tileProgressCoords.get(tile)
@@ -98,12 +92,17 @@ func _on_GetBoardState_request_completed(result, response_code, headers, body):
 
 		# color solved indicator
 		for i in range(0, row.solved):
-			
 			ptm.set_cellv(
 				tileProgress[i],
 				0
 			)
 
+		if(row.solved>=3): # Checking which tile is flipped
+			var flippedTile = [int(row.tile[0]), int(row.tile[1])]
+			btm.set_cellv(
+				Vector2(flippedTile[0], flippedTile[1]+1), 
+				tileCoords.get(flippedTile)
+			)
 
 	$Label.text = "Got board state."
 		
@@ -119,10 +118,10 @@ func checkIfCompleted(board_state):
 
 	var tilesFlipStates = []
 	for row in board_state:
-		tilesFlipStates.append(row.flipped)
-	
-	var allFlipped = tilesFlipStates.has(false)
-	
-	if (allFlipped == false):
+		tilesFlipStates.append(row.solved)
+
+	if (tilesFlipStates.min() == 3):
 		print("completed! switching to facts scene")
 		get_tree().change_scene("res://facts_scene.tscn")
+	
+		

@@ -1,7 +1,5 @@
 extends Node
 
-
-
 # func updateProgress(tileVec):
 # 	var http = HTTPClient.new()
 # 	var err = http.connect_to_host("sleepy-sands-19230.herokuapp.com")

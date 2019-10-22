@@ -122,12 +122,12 @@
 script = ExtResource( 1 )
 
 [node name="BoardTileMap" type="TileMap" parent="."]
-position = Vector2( 5, 128 )
+position = Vector2( 5, 0 )
 scale = Vector2( 1.129, 1 )
 tile_set = SubResource( 1 )
 cell_size = Vector2( 128, 128 )
 format = 1
-tile_data = PoolIntArray( 0, 6, 0, 1, 6, 0, 65536, 6, 0, 65537, 6, 0, 131072, 6, 0, 131073, 6, 0 )
+tile_data = PoolIntArray( 65536, 6, 0, 65537, 6, 0, 131072, 6, 0, 131073, 6, 0, 196608, 6, 0, 196609, 6, 0 )
 
 [node name="ProgressTileMap" type="TileMap" parent="."]
 tile_set = SubResource( 2 )

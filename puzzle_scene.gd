@@ -2,7 +2,6 @@ extends Node2D
 
 onready var tm = $KeyboardTileMap
 
-const SCENE_DELAY = 2.0
 const letters = [ 
 	"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
 	"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
