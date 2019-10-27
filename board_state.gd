@@ -48,10 +48,11 @@ func _process(delta):
 		var mouseLocV = btm.world_to_map(mouseLoc)
 		print(btm.get_cellv(mouseLocV))
 		if(mouseLocV.x >= 0 && mouseLocV.x < 2 && mouseLocV.y >= 1 && mouseLocV.y < 4):
-			var tile = [int(mouseLocV.x), int(mouseLocV.y)]
+			var tile = [int(mouseLocV.x), int(mouseLocV.y)-1]
+			print("tile is: " + str(tile))
 			var progress = game_manager.ticksSolved[tile] + game_manager.ticksInProgress[tile]
-			print(progress)
-			if(btm.get_cellv(mouseLocV) == 6 || progress < 3):
+			print("progress is: " + str(progress))
+			if(btm.get_cellv(mouseLocV) == 6 && progress < 3):
 				game_manager.changeIntoPuzzle(mouseLocV)
 
 # for touch input
@@ -62,10 +63,11 @@ func _input(event):
 		var touchPos = get_canvas_transform().xform_inv(event.position)
 		var touchPosV = btm.world_to_map(touchPos)
 		if(touchPosV.x >= 0 && touchPosV.x < 2 && touchPosV.y >= 1 && touchPosV.y < 4):
-			var tile = [int(touchPosV.x), int(touchPosV.y)]
+			var tile = [int(touchPosV.x), int(touchPosV.y)-1]
+			print("tile is: " + str(tile))
 			var progress = game_manager.ticksSolved[tile] + game_manager.ticksInProgress[tile]
-			print(progress)
-			if(btm.get_cellv(touchPosV) == 6 || progress < 3):
+			print("progress is: " + str(progress))
+			if(btm.get_cellv(touchPosV) == 6 && progress < 3):
 				game_manager.changeIntoPuzzle(touchPosV)
 
 func _on_Timer_timeout():
@@ -96,9 +98,19 @@ func _on_GetBoardState_request_completed(result, response_code, headers, body):
 		game_manager.ticksInProgress.erase(tile)
 		game_manager.ticksInProgress[tile] = row.in_progress
 
-		# color progress indicators
-		var progress = 0
 
+
+		# color progress indicators
+		# reset
+		for i in 3:
+			ptm.set_cellv(
+				tileProgress[i],
+				2
+			)
+
+		var progress = 0
+		
+		# colour green for solved
 		for i in range(0, row.solved):
 			ptm.set_cellv(
 				tileProgress[progress],
@@ -106,12 +118,14 @@ func _on_GetBoardState_request_completed(result, response_code, headers, body):
 			)
 			progress=progress+1
 		
+		# colour orange for inprogress
 		for i in range(0, row.in_progress):
 			ptm.set_cellv(
 				tileProgress[progress],
 				1
 			)
 			progress=progress+1
+		
 
 		if(row.solved>=3): # Checking which tile is flipped
 			var flippedTile = [int(row.tile[0]), int(row.tile[1])]
