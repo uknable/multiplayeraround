@@ -42,6 +42,10 @@ func _ready():
 	$PuzzleTexture.set_texture(puzzle[2])
 	$ImpairmentName.text = puzzle[1]
 
+	
+	network.inProgress(Vector2(game_manager.xPos, game_manager.yPos))
+
+
 func _process(delta):
 	#keyboard input
 	if (Input.is_action_just_pressed("ui_click")):
@@ -87,7 +91,7 @@ func _on_SubmitButton_pressed():
 		print("Solved")
 		$Feedback.show()
 		$SubmitButton.hide()
-		network.putRequest(Vector2(game_manager.xPos, game_manager.yPos))
+		network.updateSolved(Vector2(game_manager.xPos, game_manager.yPos))
 		#network.updateProgress(Vector2(game_manager.xPos, game_manager.yPos))
 
 		

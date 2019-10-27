@@ -1,6 +1,9 @@
 extends Node
 
-# func updateProgress(tileVec):
+# func inProgress(tileLocV):
+	# var xPos= tileLocV.x
+	# var yPos = tileLocV.y - 1
+
 # 	var http = HTTPClient.new()
 # 	var err = http.connect_to_host("sleepy-sands-19230.herokuapp.com")
 # 	assert(err == OK)
@@ -12,9 +15,8 @@ extends Node
 	
 # 	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
 	
-# 	var solved = game_manager.ticksSolved[]
 
-# 	var fields = {"flipped": true, "xPos": xPos, "yPos": yPos }
+# 	var fields = {"xPos": xPos, "yPos": yPos }
 # 	var queryString = http.query_string_from_dict(fields)
 # 	var headers = ["Content-Type: application/x-www-form-urlencoded"]
 
@@ -22,7 +24,7 @@ extends Node
 	
 # 	http.request(
 # 		HTTPClient.METHOD_PUT,
-# 		"/board_state",
+# 		"/puzzle_inprogress",
 # 		headers,
 # 		queryString
 # 	)
@@ -37,7 +39,7 @@ extends Node
 	
 	
 
-func putRequest(mouseLocV):
+func updateSolved(mouseLocV):
 	var xPos= mouseLocV.x
 	var yPos = mouseLocV.y - 1
 	
@@ -52,7 +54,7 @@ func putRequest(mouseLocV):
 	
 	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
 	
-	var fields = {"flipped": true, "xPos": xPos, "yPos": yPos }
+	var fields = {"xPos": xPos, "yPos": yPos }
 	var queryString = http.query_string_from_dict(fields)
 	var headers = ["Content-Type: application/x-www-form-urlencoded"]
 	
@@ -60,7 +62,7 @@ func putRequest(mouseLocV):
 	
 	http.request(
 	    HTTPClient.METHOD_PUT,
-	    "/board_state",
+	    "/puzzle_solved",
 	    headers,
 	    queryString
 	)
@@ -70,6 +72,8 @@ func putRequest(mouseLocV):
 	    print("Requesting PUT...")
 	    yield(get_tree(), "idle_frame")
 	
-	print("After PUT request: " + str(http.get_status()))
-	
+	print("After puzzle_solved PUT request: " + str(http.get_status()))
+
+	http.close()
+	print("After close: " + str(http.get_status()))
 
