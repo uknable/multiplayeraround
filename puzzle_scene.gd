@@ -43,7 +43,7 @@ func _ready():
 	$ImpairmentName.text = puzzle[1]
 
 	
-	network.inProgress(Vector2(game_manager.xPos, game_manager.yPos))
+	# network.inProgress(Vector2(game_manager.xPos, game_manager.yPos))
 
 
 func _process(delta):
