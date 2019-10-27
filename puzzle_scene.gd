@@ -42,8 +42,7 @@ func _ready():
 	$PuzzleTexture.set_texture(puzzle[2])
 	$ImpairmentName.text = puzzle[1]
 
-	
-	# network.inProgress(Vector2(game_manager.xPos, game_manager.yPos))
+	network.inProgress(Vector2(game_manager.xPos, game_manager.yPos))
 
 
 func _process(delta):
@@ -83,6 +82,7 @@ func _input(event):
 			$TextEdit.text = currText + " "
 
 func _on_BackButton_pressed():
+	network.decProgress(Vector2(game_manager.xPos, game_manager.yPos))
 	get_tree().change_scene("res://board_state.tscn")
 
 func _on_SubmitButton_pressed():

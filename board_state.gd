@@ -48,7 +48,10 @@ func _process(delta):
 		var mouseLocV = btm.world_to_map(mouseLoc)
 		print(btm.get_cellv(mouseLocV))
 		if(mouseLocV.x >= 0 && mouseLocV.x < 2 && mouseLocV.y >= 1 && mouseLocV.y < 4):
-			if(btm.get_cellv(mouseLocV) == 6):
+			var tile = [int(mouseLocV.x), int(mouseLocV.y)]
+			var progress = game_manager.ticksSolved[tile] + game_manager.ticksInProgress[tile]
+			print(progress)
+			if(btm.get_cellv(mouseLocV) == 6 || progress < 3):
 				game_manager.changeIntoPuzzle(mouseLocV)
 
 # for touch input
@@ -59,7 +62,10 @@ func _input(event):
 		var touchPos = get_canvas_transform().xform_inv(event.position)
 		var touchPosV = btm.world_to_map(touchPos)
 		if(touchPosV.x >= 0 && touchPosV.x < 2 && touchPosV.y >= 1 && touchPosV.y < 4):
-			if(btm.get_cellv(touchPosV) == 6):
+			var tile = [int(touchPosV.x), int(touchPosV.y)]
+			var progress = game_manager.ticksSolved[tile] + game_manager.ticksInProgress[tile]
+			print(progress)
+			if(btm.get_cellv(touchPosV) == 6 || progress < 3):
 				game_manager.changeIntoPuzzle(touchPosV)
 
 func _on_Timer_timeout():
@@ -83,19 +89,29 @@ func _on_GetBoardState_request_completed(result, response_code, headers, body):
 		var tileProgress = tileProgressCoords.get(tile)
 
 		#update ticksSolved in game_manager
-		print(game_manager.ticksSolved)
 		game_manager.ticksSolved.erase(tile)
 		game_manager.ticksSolved[tile] = row.solved
-		
-		print(game_manager.ticksSolved)
-		print("updated ticksSolved")
 
-		# color solved indicator
+		#update ticksInProgress in game_manager
+		game_manager.ticksInProgress.erase(tile)
+		game_manager.ticksInProgress[tile] = row.in_progress
+
+		# color progress indicators
+		var progress = 0
+
 		for i in range(0, row.solved):
 			ptm.set_cellv(
-				tileProgress[i],
+				tileProgress[progress],
 				0
 			)
+			progress=progress+1
+		
+		for i in range(0, row.in_progress):
+			ptm.set_cellv(
+				tileProgress[progress],
+				1
+			)
+			progress=progress+1
 
 		if(row.solved>=3): # Checking which tile is flipped
 			var flippedTile = [int(row.tile[0]), int(row.tile[1])]
@@ -105,13 +121,10 @@ func _on_GetBoardState_request_completed(result, response_code, headers, body):
 			)
 
 	$Label.text = "Got board state."
-		
-	getTileProgress()
+	print(game_manager.ticksSolved)
+	print(game_manager.ticksInProgress)
 	checkIfCompleted(board_state)
 
-func getTileProgress():
-
-	pass
 
 func checkIfCompleted(board_state):
 	print("checking if completed")
@@ -123,5 +136,3 @@ func checkIfCompleted(board_state):
 	if (tilesFlipStates.min() == 3):
 		print("completed! switching to facts scene")
 		get_tree().change_scene("res://facts_scene.tscn")
-	
-		
