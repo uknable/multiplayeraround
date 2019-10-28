@@ -35,7 +35,6 @@ var filter
 var object
 
 func _ready():
-
 	randomize()
 	
 	object = objects[randi() % objects.size()]
@@ -43,9 +42,9 @@ func _ready():
 
 	filter = filters[randi() % objects.size()]
 	$FilterTexture.set_texture(filter[0])
-	$ImpairmentName.text = (filter[1])
+	$ImpairmentName.text = filter[1]
 
-	network.inProgress(Vector2(game_manager.xPos, game_manager.yPos))
+	inProgress(Vector2(game_manager.xPos, game_manager.yPos))
 
 
 func _process(delta):
@@ -85,21 +84,143 @@ func _input(event):
 			$TextEdit.text = currText + " "
 
 func _on_BackButton_pressed():
-	network.decProgress(Vector2(game_manager.xPos, game_manager.yPos))
+	decProgress(Vector2(game_manager.xPos, game_manager.yPos))
 	get_tree().change_scene("res://board_state.tscn")
 
 func _on_SubmitButton_pressed():
 	if ($TextEdit.text.to_lower() == object[1]):
+		updateSolved(Vector2(game_manager.xPos, game_manager.yPos))
 		$WhatIsLabel.text = object[1].to_upper()
-		print("Solved")
 		$Feedback.show()
 		$SubmitButton.hide()
-		network.updateSolved(Vector2(game_manager.xPos, game_manager.yPos))
-		
 	else:
-		print("incorrect")
-		$StateLabel.text = "Incorrect try again."
-
+		$TextEdit.clear()
+		$TextEdit.placeholder_text = "Incorrect! Try Again"
 
 func _on_ReturnToBoardButton_pressed():
 	get_tree().change_scene("res://board_state.tscn")
+
+func inProgress(tileLocV):
+	$LoadingAnimation.show()
+	var xPos= tileLocV.x
+	var yPos = tileLocV.y - 1
+
+	var http = HTTPClient.new()
+	var err = http.connect_to_host("sleepy-sands-19230.herokuapp.com")
+	assert(err == OK)
+
+	while http.get_status() == HTTPClient.STATUS_CONNECTING or http.get_status() == HTTPClient.STATUS_RESOLVING:
+		http.poll()
+		
+		print("Connecting...")
+		OS.delay_msec(500)
+	
+	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
+	
+
+	var fields = {"xPos": xPos, "yPos": yPos }
+	var queryString = http.query_string_from_dict(fields)
+	var headers = ["Content-Type: application/x-www-form-urlencoded"]
+
+	print("About to do PUT request: " + str(http.get_status()))
+	
+	http.request(
+		HTTPClient.METHOD_PUT,
+		"/puzzle_inprogress",
+		headers,
+		queryString
+	)
+	
+	while http.get_status() == HTTPClient.STATUS_REQUESTING:
+		http.poll()
+		print("Requesting PUT...")
+		yield(get_tree(), "idle_frame")
+	
+	print("After inprogress PUT request: " + str(http.get_status()))
+
+	http.close()
+	$LoadingAnimation.hide()
+		
+func decProgress(tileLocV):
+	$LoadingAnimation.show()
+	var xPos= tileLocV.x
+	var yPos = tileLocV.y - 1
+
+	var http = HTTPClient.new()
+	var err = http.connect_to_host("sleepy-sands-19230.herokuapp.com")
+	assert(err == OK)
+
+	while http.get_status() == HTTPClient.STATUS_CONNECTING or http.get_status() == HTTPClient.STATUS_RESOLVING:
+		http.poll()
+		
+		print("Connecting...")
+		OS.delay_msec(500)
+	
+	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
+	
+
+	var fields = {"xPos": xPos, "yPos": yPos }
+	var queryString = http.query_string_from_dict(fields)
+	var headers = ["Content-Type: application/x-www-form-urlencoded"]
+
+	print("About to do PUT request: " + str(http.get_status()))
+	
+	http.request(
+		HTTPClient.METHOD_PUT,
+		"/puzzle_decprogress",
+		headers,
+		queryString
+	)
+	
+	while http.get_status() == HTTPClient.STATUS_REQUESTING:
+		http.poll()
+		print("Requesting PUT...")
+		yield(get_tree(), "idle_frame")
+	
+	print("After inprogress PUT request: " + str(http.get_status()))
+
+	http.close()
+	$LoadingAnimation.hide()
+	
+
+func updateSolved(mouseLocV):
+	$LoadingAnimation.show()
+	var xPos= mouseLocV.x
+	var yPos = mouseLocV.y - 1
+	
+	var http = HTTPClient.new()
+	var err = http.connect_to_host("sleepy-sands-19230.herokuapp.com")
+	assert(err == OK)
+	
+	while http.get_status() == HTTPClient.STATUS_CONNECTING or http.get_status() == HTTPClient.STATUS_RESOLVING:
+		http.poll()
+		
+		print("Connecting...")
+		OS.delay_msec(500)
+	
+	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
+	
+	var fields = {"xPos": xPos, "yPos": yPos }
+	var queryString = http.query_string_from_dict(fields)
+	var headers = ["Content-Type: application/x-www-form-urlencoded"]
+	
+	print("About to do PUT request: " + str(http.get_status()))
+	
+	http.request(
+	    HTTPClient.METHOD_PUT,
+	    "/puzzle_solved",
+	    headers,
+	    queryString
+	)
+	
+	while http.get_status() == HTTPClient.STATUS_REQUESTING:
+	    http.poll()
+	    print("Requesting PUT...")
+	    yield(get_tree(), "idle_frame")
+	
+	print("After puzzle_solved PUT request: " + str(http.get_status()))
+
+	http.close()
+	print("After close: " + str(http.get_status()))
+	$LoadingAnimation.hide()
+

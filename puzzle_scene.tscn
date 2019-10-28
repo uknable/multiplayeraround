@@ -1,287 +1,288 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://puzzle_scene.gd" type="Script" id=1]
 [ext_resource path="res://assets/object_bus.jpg" type="Texture" id=2]
 [ext_resource path="res://assets/filter_macular_degen.png" type="Texture" id=3]
 [ext_resource path="res://assets/Noto_Sans/noto_sans_regular_16.tres" type="DynamicFont" id=4]
 [ext_resource path="res://assets/back_icon.png" type="Texture" id=5]
-[ext_resource path="res://assets/keyboard/keyboard2.png" type="Texture" id=6]
+[ext_resource path="res://assets/keyboard/keyboard_sheet_2.png" type="Texture" id=6]
 [ext_resource path="res://assets/line_input.png" type="Texture" id=7]
 [ext_resource path="res://assets/Noto_Sans/noto_sans_regular_12.tres" type="DynamicFont" id=8]
 [ext_resource path="res://assets/progress_solved.png" type="Texture" id=9]
 [ext_resource path="res://assets/Noto_Sans/noto_sans_bold_22.tres" type="DynamicFont" id=10]
 [ext_resource path="res://assets/return_button.png" type="Texture" id=11]
 [ext_resource path="res://assets/submit_button.png" type="Texture" id=12]
+[ext_resource path="res://LoadingAnimation.tscn" type="PackedScene" id=13]
 
 [sub_resource type="TileSet" id=1]
-0/name = "keyboard2.png 0"
+0/name = "keyboard_sheet_2.png 0"
 0/texture = ExtResource( 6 )
 0/tex_offset = Vector2( 0, 0 )
 0/modulate = Color( 1, 1, 1, 1 )
-0/region = Rect2( 0, 0, 24, 24 )
+0/region = Rect2( 0, 0, 30, 30 )
 0/tile_mode = 0
 0/occluder_offset = Vector2( 0, 0 )
 0/navigation_offset = Vector2( 0, 0 )
 0/shapes = [  ]
 0/z_index = 0
-1/name = "keyboard2.png 1"
+1/name = "keyboard_sheet_2.png 1"
 1/texture = ExtResource( 6 )
 1/tex_offset = Vector2( 0, 0 )
 1/modulate = Color( 1, 1, 1, 1 )
-1/region = Rect2( 24, 0, 24, 24 )
+1/region = Rect2( 30, 0, 30, 30 )
 1/tile_mode = 0
 1/occluder_offset = Vector2( 0, 0 )
 1/navigation_offset = Vector2( 0, 0 )
 1/shapes = [  ]
 1/z_index = 0
-2/name = "keyboard2.png 2"
+2/name = "keyboard_sheet_2.png 2"
 2/texture = ExtResource( 6 )
 2/tex_offset = Vector2( 0, 0 )
 2/modulate = Color( 1, 1, 1, 1 )
-2/region = Rect2( 48, 0, 24, 24 )
+2/region = Rect2( 60, 0, 30, 30 )
 2/tile_mode = 0
 2/occluder_offset = Vector2( 0, 0 )
 2/navigation_offset = Vector2( 0, 0 )
 2/shapes = [  ]
 2/z_index = 0
-3/name = "keyboard2.png 3"
+3/name = "keyboard_sheet_2.png 3"
 3/texture = ExtResource( 6 )
 3/tex_offset = Vector2( 0, 0 )
 3/modulate = Color( 1, 1, 1, 1 )
-3/region = Rect2( 72, 0, 24, 24 )
+3/region = Rect2( 90, 0, 30, 30 )
 3/tile_mode = 0
 3/occluder_offset = Vector2( 0, 0 )
 3/navigation_offset = Vector2( 0, 0 )
 3/shapes = [  ]
 3/z_index = 0
-4/name = "keyboard2.png 4"
+4/name = "keyboard_sheet_2.png 4"
 4/texture = ExtResource( 6 )
 4/tex_offset = Vector2( 0, 0 )
 4/modulate = Color( 1, 1, 1, 1 )
-4/region = Rect2( 96, 0, 24, 24 )
+4/region = Rect2( 120, 0, 30, 30 )
 4/tile_mode = 0
 4/occluder_offset = Vector2( 0, 0 )
 4/navigation_offset = Vector2( 0, 0 )
 4/shapes = [  ]
 4/z_index = 0
-5/name = "keyboard2.png 5"
+5/name = "keyboard_sheet_2.png 5"
 5/texture = ExtResource( 6 )
 5/tex_offset = Vector2( 0, 0 )
 5/modulate = Color( 1, 1, 1, 1 )
-5/region = Rect2( 120, 0, 24, 24 )
+5/region = Rect2( 150, 0, 30, 30 )
 5/tile_mode = 0
 5/occluder_offset = Vector2( 0, 0 )
 5/navigation_offset = Vector2( 0, 0 )
 5/shapes = [  ]
 5/z_index = 0
-6/name = "keyboard2.png 6"
+6/name = "keyboard_sheet_2.png 6"
 6/texture = ExtResource( 6 )
 6/tex_offset = Vector2( 0, 0 )
 6/modulate = Color( 1, 1, 1, 1 )
-6/region = Rect2( 144, 0, 24, 24 )
+6/region = Rect2( 180, 0, 30, 30 )
 6/tile_mode = 0
 6/occluder_offset = Vector2( 0, 0 )
 6/navigation_offset = Vector2( 0, 0 )
 6/shapes = [  ]
 6/z_index = 0
-7/name = "keyboard2.png 7"
+7/name = "keyboard_sheet_2.png 7"
 7/texture = ExtResource( 6 )
 7/tex_offset = Vector2( 0, 0 )
 7/modulate = Color( 1, 1, 1, 1 )
-7/region = Rect2( 168, 0, 24, 24 )
+7/region = Rect2( 210, 0, 30, 30 )
 7/tile_mode = 0
 7/occluder_offset = Vector2( 0, 0 )
 7/navigation_offset = Vector2( 0, 0 )
 7/shapes = [  ]
 7/z_index = 0
-8/name = "keyboard2.png 8"
+8/name = "keyboard_sheet_2.png 8"
 8/texture = ExtResource( 6 )
 8/tex_offset = Vector2( 0, 0 )
 8/modulate = Color( 1, 1, 1, 1 )
-8/region = Rect2( 192, 0, 24, 24 )
+8/region = Rect2( 240, 0, 30, 30 )
 8/tile_mode = 0
 8/occluder_offset = Vector2( 0, 0 )
 8/navigation_offset = Vector2( 0, 0 )
 8/shapes = [  ]
 8/z_index = 0
-9/name = "keyboard2.png 9"
+9/name = "keyboard_sheet_2.png 9"
 9/texture = ExtResource( 6 )
 9/tex_offset = Vector2( 0, 0 )
 9/modulate = Color( 1, 1, 1, 1 )
-9/region = Rect2( 216, 0, 24, 24 )
+9/region = Rect2( 270, 0, 30, 30 )
 9/tile_mode = 0
 9/occluder_offset = Vector2( 0, 0 )
 9/navigation_offset = Vector2( 0, 0 )
 9/shapes = [  ]
 9/z_index = 0
-10/name = "keyboard2.png 10"
+10/name = "keyboard_sheet_2.png 10"
 10/texture = ExtResource( 6 )
 10/tex_offset = Vector2( 0, 0 )
 10/modulate = Color( 1, 1, 1, 1 )
-10/region = Rect2( 240, 0, 24, 24 )
+10/region = Rect2( 300, 0, 30, 30 )
 10/tile_mode = 0
 10/occluder_offset = Vector2( 0, 0 )
 10/navigation_offset = Vector2( 0, 0 )
 10/shapes = [  ]
 10/z_index = 0
-11/name = "keyboard2.png 11"
+11/name = "keyboard_sheet_2.png 11"
 11/texture = ExtResource( 6 )
 11/tex_offset = Vector2( 0, 0 )
 11/modulate = Color( 1, 1, 1, 1 )
-11/region = Rect2( 264, 0, 24, 24 )
+11/region = Rect2( 330, 0, 30, 30 )
 11/tile_mode = 0
 11/occluder_offset = Vector2( 0, 0 )
 11/navigation_offset = Vector2( 0, 0 )
 11/shapes = [  ]
 11/z_index = 0
-12/name = "keyboard2.png 12"
+12/name = "keyboard_sheet_2.png 12"
 12/texture = ExtResource( 6 )
 12/tex_offset = Vector2( 0, 0 )
 12/modulate = Color( 1, 1, 1, 1 )
-12/region = Rect2( 288, 0, 24, 24 )
+12/region = Rect2( 360, 0, 30, 30 )
 12/tile_mode = 0
 12/occluder_offset = Vector2( 0, 0 )
 12/navigation_offset = Vector2( 0, 0 )
 12/shapes = [  ]
 12/z_index = 0
-13/name = "keyboard2.png 13"
+13/name = "keyboard_sheet_2.png 13"
 13/texture = ExtResource( 6 )
 13/tex_offset = Vector2( 0, 0 )
 13/modulate = Color( 1, 1, 1, 1 )
-13/region = Rect2( 0, 24, 24, 24 )
+13/region = Rect2( 0, 30, 30, 30 )
 13/tile_mode = 0
 13/occluder_offset = Vector2( 0, 0 )
 13/navigation_offset = Vector2( 0, 0 )
 13/shapes = [  ]
 13/z_index = 0
-14/name = "keyboard2.png 14"
+14/name = "keyboard_sheet_2.png 14"
 14/texture = ExtResource( 6 )
 14/tex_offset = Vector2( 0, 0 )
 14/modulate = Color( 1, 1, 1, 1 )
-14/region = Rect2( 24, 24, 24, 24 )
+14/region = Rect2( 30, 30, 30, 30 )
 14/tile_mode = 0
 14/occluder_offset = Vector2( 0, 0 )
 14/navigation_offset = Vector2( 0, 0 )
 14/shapes = [  ]
 14/z_index = 0
-15/name = "keyboard2.png 15"
+15/name = "keyboard_sheet_2.png 15"
 15/texture = ExtResource( 6 )
 15/tex_offset = Vector2( 0, 0 )
 15/modulate = Color( 1, 1, 1, 1 )
-15/region = Rect2( 48, 24, 24, 24 )
+15/region = Rect2( 60, 30, 30, 30 )
 15/tile_mode = 0
 15/occluder_offset = Vector2( 0, 0 )
 15/navigation_offset = Vector2( 0, 0 )
 15/shapes = [  ]
 15/z_index = 0
-16/name = "keyboard2.png 16"
+16/name = "keyboard_sheet_2.png 16"
 16/texture = ExtResource( 6 )
 16/tex_offset = Vector2( 0, 0 )
 16/modulate = Color( 1, 1, 1, 1 )
-16/region = Rect2( 72, 24, 24, 24 )
+16/region = Rect2( 90, 30, 30, 30 )
 16/tile_mode = 0
 16/occluder_offset = Vector2( 0, 0 )
 16/navigation_offset = Vector2( 0, 0 )
 16/shapes = [  ]
 16/z_index = 0
-17/name = "keyboard2.png 17"
+17/name = "keyboard_sheet_2.png 17"
 17/texture = ExtResource( 6 )
 17/tex_offset = Vector2( 0, 0 )
 17/modulate = Color( 1, 1, 1, 1 )
-17/region = Rect2( 96, 24, 24, 24 )
+17/region = Rect2( 120, 30, 30, 30 )
 17/tile_mode = 0
 17/occluder_offset = Vector2( 0, 0 )
 17/navigation_offset = Vector2( 0, 0 )
 17/shapes = [  ]
 17/z_index = 0
-18/name = "keyboard2.png 18"
+18/name = "keyboard_sheet_2.png 18"
 18/texture = ExtResource( 6 )
 18/tex_offset = Vector2( 0, 0 )
 18/modulate = Color( 1, 1, 1, 1 )
-18/region = Rect2( 120, 24, 24, 24 )
+18/region = Rect2( 150, 30, 30, 30 )
 18/tile_mode = 0
 18/occluder_offset = Vector2( 0, 0 )
 18/navigation_offset = Vector2( 0, 0 )
 18/shapes = [  ]
 18/z_index = 0
-19/name = "keyboard2.png 19"
+19/name = "keyboard_sheet_2.png 19"
 19/texture = ExtResource( 6 )
 19/tex_offset = Vector2( 0, 0 )
 19/modulate = Color( 1, 1, 1, 1 )
-19/region = Rect2( 144, 24, 24, 24 )
+19/region = Rect2( 180, 30, 30, 30 )
 19/tile_mode = 0
 19/occluder_offset = Vector2( 0, 0 )
 19/navigation_offset = Vector2( 0, 0 )
 19/shapes = [  ]
 19/z_index = 0
-20/name = "keyboard2.png 20"
+20/name = "keyboard_sheet_2.png 20"
 20/texture = ExtResource( 6 )
 20/tex_offset = Vector2( 0, 0 )
 20/modulate = Color( 1, 1, 1, 1 )
-20/region = Rect2( 168, 24, 24, 24 )
+20/region = Rect2( 210, 30, 30, 30 )
 20/tile_mode = 0
 20/occluder_offset = Vector2( 0, 0 )
 20/navigation_offset = Vector2( 0, 0 )
 20/shapes = [  ]
 20/z_index = 0
-21/name = "keyboard2.png 21"
+21/name = "keyboard_sheet_2.png 21"
 21/texture = ExtResource( 6 )
 21/tex_offset = Vector2( 0, 0 )
 21/modulate = Color( 1, 1, 1, 1 )
-21/region = Rect2( 192, 24, 24, 24 )
+21/region = Rect2( 240, 30, 30, 30 )
 21/tile_mode = 0
 21/occluder_offset = Vector2( 0, 0 )
 21/navigation_offset = Vector2( 0, 0 )
 21/shapes = [  ]
 21/z_index = 0
-22/name = "keyboard2.png 22"
+22/name = "keyboard_sheet_2.png 22"
 22/texture = ExtResource( 6 )
 22/tex_offset = Vector2( 0, 0 )
 22/modulate = Color( 1, 1, 1, 1 )
-22/region = Rect2( 216, 24, 24, 24 )
+22/region = Rect2( 270, 30, 30, 30 )
 22/tile_mode = 0
 22/occluder_offset = Vector2( 0, 0 )
 22/navigation_offset = Vector2( 0, 0 )
 22/shapes = [  ]
 22/z_index = 0
-23/name = "keyboard2.png 23"
+23/name = "keyboard_sheet_2.png 23"
 23/texture = ExtResource( 6 )
 23/tex_offset = Vector2( 0, 0 )
 23/modulate = Color( 1, 1, 1, 1 )
-23/region = Rect2( 240, 24, 24, 24 )
+23/region = Rect2( 300, 30, 30, 30 )
 23/tile_mode = 0
 23/occluder_offset = Vector2( 0, 0 )
 23/navigation_offset = Vector2( 0, 0 )
 23/shapes = [  ]
 23/z_index = 0
-24/name = "keyboard2.png 24"
+24/name = "keyboard_sheet_2.png 24"
 24/texture = ExtResource( 6 )
 24/tex_offset = Vector2( 0, 0 )
 24/modulate = Color( 1, 1, 1, 1 )
-24/region = Rect2( 264, 24, 24, 24 )
+24/region = Rect2( 330, 30, 30, 30 )
 24/tile_mode = 0
 24/occluder_offset = Vector2( 0, 0 )
 24/navigation_offset = Vector2( 0, 0 )
 24/shapes = [  ]
 24/z_index = 0
-25/name = "keyboard2.png 25"
+25/name = "keyboard_sheet_2.png 25"
 25/texture = ExtResource( 6 )
 25/tex_offset = Vector2( 0, 0 )
 25/modulate = Color( 1, 1, 1, 1 )
-25/region = Rect2( 288, 24, 24, 24 )
+25/region = Rect2( 360, 30, 30, 30 )
 25/tile_mode = 0
 25/occluder_offset = Vector2( 0, 0 )
 25/navigation_offset = Vector2( 0, 0 )
 25/shapes = [  ]
 25/z_index = 0
-26/name = "keyboard2.png 26"
+26/name = "keyboard_sheet_2.png 26"
 26/texture = ExtResource( 6 )
 26/tex_offset = Vector2( 0, 0 )
 26/modulate = Color( 1, 1, 1, 1 )
-26/region = Rect2( 0, 48, 48, 24 )
+26/region = Rect2( 0, 60, 60, 30 )
 26/tile_mode = 2
 26/autotile/icon_coordinate = Vector2( 0, 0 )
-26/autotile/tile_size = Vector2( 24, 24 )
+26/autotile/tile_size = Vector2( 30, 30 )
 26/autotile/spacing = 0
 26/autotile/occluder_map = [  ]
 26/autotile/navpoly_map = [  ]
@@ -290,14 +291,14 @@
 26/navigation_offset = Vector2( 0, 0 )
 26/shapes = [  ]
 26/z_index = 0
-27/name = "keyboard2.png 27"
+27/name = "keyboard_sheet_2.png 27"
 27/texture = ExtResource( 6 )
 27/tex_offset = Vector2( 0, 0 )
 27/modulate = Color( 1, 1, 1, 1 )
-27/region = Rect2( 48, 48, 96, 24 )
+27/region = Rect2( 60, 60, 120, 30 )
 27/tile_mode = 2
 27/autotile/icon_coordinate = Vector2( 0, 0 )
-27/autotile/tile_size = Vector2( 24, 24 )
+27/autotile/tile_size = Vector2( 30, 30 )
 27/autotile/spacing = 0
 27/autotile/occluder_map = [  ]
 27/autotile/navpoly_map = [  ]
@@ -313,26 +314,26 @@
 script = ExtResource( 1 )
 
 [node name="PuzzleTexture" type="TextureRect" parent="."]
-margin_top = 170.0
+margin_top = 145.0
 margin_right = 300.0
-margin_bottom = 340.0
+margin_bottom = 315.0
 rect_pivot_offset = Vector2( 73.7595, 17.3695 )
 texture = ExtResource( 2 )
 expand = true
 
 [node name="FilterTexture" type="TextureRect" parent="."]
-margin_top = 170.0
+margin_top = 145.0
 margin_right = 300.0
-margin_bottom = 340.0
+margin_bottom = 315.0
 rect_pivot_offset = Vector2( 73.7595, 17.3695 )
 texture = ExtResource( 3 )
 expand = true
 
 [node name="HeaderCopy" type="RichTextLabel" parent="."]
 margin_left = 41.0
-margin_top = 92.0
+margin_top = 73.0
 margin_right = 278.0
-margin_bottom = 122.0
+margin_bottom = 103.0
 custom_fonts/normal_font = ExtResource( 4 )
 text = "Perspective of someone with"
 
@@ -345,12 +346,12 @@ custom_fonts/normal_font = ExtResource( 4 )
 text = "Types of Impairment"
 
 [node name="ImpairmentName" type="RichTextLabel" parent="."]
-margin_left = 100.0
-margin_top = 119.0
-margin_right = 245.0
-margin_bottom = 149.0
+margin_left = 60.0
+margin_top = 100.0
+margin_right = 275.0
+margin_bottom = 130.0
 custom_fonts/normal_font = ExtResource( 4 )
-text = "*impairment*"
+text = "macular degeneration"
 
 [node name="BackButton" type="TextureButton" parent="."]
 margin_left = 17.0
@@ -362,36 +363,36 @@ expand = true
 
 [node name="KeyboardTileMap" type="TileMap" parent="."]
 tile_set = SubResource( 1 )
-cell_size = Vector2( 24, 24 )
+cell_size = Vector2( 30, 30 )
 cell_half_offset = 0
 format = 1
-tile_data = PoolIntArray( 1179649, 16, 0, 1179650, 22, 0, 1179651, 4, 0, 1179652, 17, 0, 1179653, 19, 0, 1179654, 24, 0, 1179655, 20, 0, 1179656, 8, 0, 1179657, 14, 0, 1179658, 15, 0, 1245185, 0, 0, 1245186, 18, 0, 1245187, 3, 0, 1245188, 5, 0, 1245189, 6, 0, 1245190, 7, 0, 1245191, 9, 0, 1245192, 10, 0, 1245193, 11, 0, 1310722, 25, 0, 1310723, 23, 0, 1310724, 2, 0, 1310725, 21, 0, 1310726, 1, 0, 1310727, 13, 0, 1310728, 12, 0, 1376258, 27, 0, 1376259, 27, 1, 1376260, 27, 2, 1376261, 27, 3, 1376263, 26, 0, 1376264, 26, 1 )
+tile_data = PoolIntArray( 917504, 16, 0, 917505, 22, 0, 917506, 4, 0, 917507, 17, 0, 917508, 19, 0, 917509, 24, 0, 917510, 20, 0, 917511, 8, 0, 917512, 14, 0, 917513, 15, 0, 983040, 0, 0, 983041, 18, 0, 983042, 3, 0, 983043, 5, 0, 983044, 6, 0, 983045, 7, 0, 983046, 9, 0, 983047, 10, 0, 983048, 11, 0, 1048577, 25, 0, 1048578, 23, 0, 1048579, 2, 0, 1048580, 21, 0, 1048581, 1, 0, 1048582, 13, 0, 1048583, 12, 0, 1114113, 27, 0, 1114114, 27, 1, 1114115, 27, 2, 1114116, 27, 3, 1114118, 26, 0, 1114119, 26, 1 )
 __meta__ = {
 "_edit_lock_": true
 }
 
 [node name="WhatIsLabel" type="Label" parent="."]
 margin_left = 77.0
-margin_top = 353.0
+margin_top = 323.0
 margin_right = 224.0
-margin_bottom = 376.0
+margin_bottom = 346.0
 custom_fonts/font = ExtResource( 4 )
 text = "What is this object?"
 align = 1
 
 [node name="TextEditTex" type="TextureRect" parent="."]
 margin_left = 15.0
-margin_top = 389.0
+margin_top = 359.0
 margin_right = 288.0
-margin_bottom = 422.0
+margin_bottom = 392.0
 texture = ExtResource( 7 )
 expand = true
 
 [node name="TextEdit" type="LineEdit" parent="."]
 margin_left = 31.0
-margin_top = 390.0
+margin_top = 360.0
 margin_right = 264.0
-margin_bottom = 420.0
+margin_bottom = 390.0
 custom_styles/normal = SubResource( 2 )
 custom_fonts/font = ExtResource( 8 )
 clear_button_enabled = true
@@ -401,17 +402,19 @@ placeholder_text = "Enter answer here"
 visible = false
 
 [node name="FeedbackColour" type="TextureRect" parent="Feedback"]
-margin_top = 389.0
+margin_top = 400.0
 margin_right = 300.0
-margin_bottom = 530.0
+margin_bottom = 541.0
 texture = ExtResource( 9 )
 stretch_mode = 1
 
 [node name="FeedbackText" type="RichTextLabel" parent="Feedback"]
 margin_left = 90.0
-margin_top = 440.0
+margin_top = 451.0
 margin_right = 210.0
-margin_bottom = 470.0
+margin_bottom = 481.0
+grow_horizontal = 2
+grow_vertical = 2
 custom_fonts/bold_font = ExtResource( 10 )
 custom_colors/default_color = Color( 0, 0, 0, 1 )
 bbcode_enabled = true
@@ -421,19 +424,22 @@ scroll_active = false
 
 [node name="ReturnToBoardButton" type="TextureButton" parent="Feedback"]
 margin_left = 90.0
-margin_top = 540.0
+margin_top = 550.0
 margin_right = 216.0
-margin_bottom = 580.0
+margin_bottom = 590.0
 texture_normal = ExtResource( 11 )
 expand = true
 
 [node name="SubmitButton" type="TextureButton" parent="."]
 margin_left = 90.0
-margin_top = 540.0
+margin_top = 550.0
 margin_right = 216.0
-margin_bottom = 580.0
+margin_bottom = 590.0
 texture_normal = ExtResource( 12 )
 expand = true
+
+[node name="LoadingAnimation" parent="." instance=ExtResource( 13 )]
+visible = false
 [connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="focus_entered" from="TextEdit" to="." method="_on_TextEdit_focus_entered"]
 [connection signal="focus_exited" from="TextEdit" to="." method="_on_TextEdit_focus_exited"]

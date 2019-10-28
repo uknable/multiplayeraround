@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://board_state.gd" type="Script" id=1]
 [ext_resource path="res://assets/board_0.png" type="Texture" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://assets/progress_available_30.png" type="Texture" id=11]
 [ext_resource path="res://assets/Noto_Sans/noto_sans_bold_22.tres" type="DynamicFont" id=12]
 [ext_resource path="res://assets/board_legend.png" type="Texture" id=13]
+[ext_resource path="res://LoadingAnimation.tscn" type="PackedScene" id=14]
 
 [sub_resource type="TileSet" id=1]
 0/name = "board_0.png 0"
@@ -146,6 +147,7 @@ bbcode_text = "[b]Tap a Tile[/b]"
 text = "Tap a Tile"
 
 [node name="Label" type="Label" parent="."]
+visible = false
 margin_left = 28.0
 margin_top = 23.0
 margin_right = 72.0
@@ -161,4 +163,7 @@ margin_right = 277.0
 margin_bottom = 571.0
 texture = ExtResource( 13 )
 expand = true
+
+[node name="LoadingAnimation" parent="." instance=ExtResource( 14 )]
+visible = false
 [connection signal="request_completed" from="GetBoardState" to="." method="_on_GetBoardState_request_completed"]

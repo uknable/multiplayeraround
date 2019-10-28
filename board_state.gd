@@ -40,34 +40,43 @@ func _ready():
 	_timer.set_one_shot(false)
 	_timer.start()
 
+	$LoadingAnimation.show()
+
 
 #for mouse input
 func _process(delta):
 	if (Input.is_action_just_pressed("ui_click")):
+
 		var mouseLoc = get_global_mouse_position()
 		var mouseLocV = btm.world_to_map(mouseLoc)
-		print(btm.get_cellv(mouseLocV))
+
 		if(mouseLocV.x >= 0 && mouseLocV.x < 2 && mouseLocV.y >= 1 && mouseLocV.y < 4):
+
 			var tile = [int(mouseLocV.x), int(mouseLocV.y)-1]
-			print("tile is: " + str(tile))
 			var progress = game_manager.ticksSolved[tile] + game_manager.ticksInProgress[tile]
-			print("progress is: " + str(progress))
+			
 			if(btm.get_cellv(mouseLocV) == 6 && progress < 3):
+				$LoadingAnimation.show()
 				game_manager.changeIntoPuzzle(mouseLocV)
+	
+
 
 # for touch input
 func _input(event):
 	if not event is InputEventScreenTouch:
 		return
 	if event.pressed:
+
 		var touchPos = get_canvas_transform().xform_inv(event.position)
 		var touchPosV = btm.world_to_map(touchPos)
+
 		if(touchPosV.x >= 0 && touchPosV.x < 2 && touchPosV.y >= 1 && touchPosV.y < 4):
+
 			var tile = [int(touchPosV.x), int(touchPosV.y)-1]
-			print("tile is: " + str(tile))
 			var progress = game_manager.ticksSolved[tile] + game_manager.ticksInProgress[tile]
-			print("progress is: " + str(progress))
+			
 			if(btm.get_cellv(touchPosV) == 6 && progress < 3):
+				$LoadingAnimation.show()
 				game_manager.changeIntoPuzzle(touchPosV)
 
 func _on_Timer_timeout():
@@ -75,12 +84,13 @@ func _on_Timer_timeout():
 
 func getBoardState():
 	$GetBoardState.request("https://sleepy-sands-19230.herokuapp.com/board_state")
-	$Label.text = "Loading..."
+	print($GetBoardState.get_http_client_status())
 
 func _on_GetBoardState_request_completed(result, response_code, headers, body):
 	var json = JSON.parse(body.get_string_from_utf8())
 	board_state = json.result.get('info')
 
+	$LoadingAnimation.hide()
 
 	for row in board_state:
 		# tile in row is an Array of Float(Real)
@@ -134,9 +144,6 @@ func _on_GetBoardState_request_completed(result, response_code, headers, body):
 				tileCoords.get(flippedTile)
 			)
 
-	$Label.text = "Got board state."
-	print(game_manager.ticksSolved)
-	print(game_manager.ticksInProgress)
 	checkIfCompleted(board_state)
 
 
