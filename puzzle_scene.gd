@@ -12,16 +12,21 @@ var object_lights = preload("res://.import/object_lights.png-4936233f92d78830333
 var object_tree = preload("res://.import/object_tree.png-58844deec650c0cec5a6d0500edc4e5b.stex")
 var object_bus = preload("res://.import/object_bus.jpg-20a1c2014573cc1968d74f5b796e3a62.stex")
 
+var sound_car = load("res://assets/sounds/BMW_driveby.wav")
+var sound_lights = load("res://assets/sounds/trafficlights.wav") 
+var sound_tree = load("res://assets/sounds/tree.wav")
+var sound_bus = load("res://assets/sounds/bus_stopandgo.wav")
+
 var filter_macular = preload("res://.import/filter_macular_degen.png-dca601ebfdb15fde30ee3084c4906d9c.stex")
 var filter_retinopathy = preload("res://.import/filter_retinopathy.png-030e16ad7853741bfac2bb543650402c.stex")
 var filter_glaucoma = preload("res://.import/filter_glaucoma.png-7584f9d8180d8bf9face0b72050f5f97.stex")
 var filter_retinitis = preload("res://.import/filter_retinitis.png-ea84f1c3fe90cfad200933f86d03aa33.stex")
 
 var objects = [
-	[object_car, "car"],
-	[object_lights, "traffic lights"],
-	[object_tree, "tree"],
-	[object_bus, "bus"]
+	[object_car, "car", sound_car],
+	[object_lights, "traffic lights", sound_lights],
+	[object_tree, "tree", sound_tree],
+	[object_bus, "bus", sound_bus]
 ]
 
 var filters = [
@@ -35,12 +40,15 @@ var filter
 var object
 
 func _ready():
+	
+
 	randomize()
 	
 	object = objects[randi() % objects.size()]
 	$PuzzleTexture.set_texture(object[0])
+	$HintSound.stream = object[2]
 
-	filter = filters[randi() % objects.size()]
+	filter = filters[randi() % filters.size()]
 	$FilterTexture.set_texture(filter[0])
 	$ImpairmentName.text = filter[1]
 
@@ -224,3 +232,5 @@ func updateSolved(mouseLocV):
 	print("After close: " + str(http.get_status()))
 	$LoadingAnimation.hide()
 
+func _on_HintButton_pressed():
+	$HintSound.play()

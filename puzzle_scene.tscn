@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://puzzle_scene.gd" type="Script" id=1]
 [ext_resource path="res://assets/object_bus.jpg" type="Texture" id=2]
@@ -13,6 +13,8 @@
 [ext_resource path="res://assets/return_button.png" type="Texture" id=11]
 [ext_resource path="res://assets/submit_button.png" type="Texture" id=12]
 [ext_resource path="res://LoadingAnimation.tscn" type="PackedScene" id=13]
+[ext_resource path="res://assets/hint_button.png" type="Texture" id=14]
+[ext_resource path="res://assets/sounds/birds.wav" type="AudioStream" id=15]
 
 [sub_resource type="TileSet" id=1]
 0/name = "keyboard_sheet_2.png 0"
@@ -338,9 +340,9 @@ custom_fonts/normal_font = ExtResource( 4 )
 text = "Perspective of someone with"
 
 [node name="Heading" type="RichTextLabel" parent="."]
-margin_left = 77.0
+margin_left = 68.0
 margin_top = 22.0
-margin_right = 248.0
+margin_right = 239.0
 margin_bottom = 52.0
 custom_fonts/normal_font = ExtResource( 4 )
 text = "Types of Impairment"
@@ -440,8 +442,19 @@ expand = true
 
 [node name="LoadingAnimation" parent="." instance=ExtResource( 13 )]
 visible = false
+
+[node name="HintButton" type="TextureButton" parent="."]
+margin_left = 250.0
+margin_top = 20.0
+margin_right = 281.0
+margin_bottom = 51.0
+texture_normal = ExtResource( 14 )
+
+[node name="HintSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 15 )
 [connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="focus_entered" from="TextEdit" to="." method="_on_TextEdit_focus_entered"]
 [connection signal="focus_exited" from="TextEdit" to="." method="_on_TextEdit_focus_exited"]
 [connection signal="pressed" from="Feedback/ReturnToBoardButton" to="." method="_on_ReturnToBoardButton_pressed"]
 [connection signal="pressed" from="SubmitButton" to="." method="_on_SubmitButton_pressed"]
+[connection signal="pressed" from="HintButton" to="." method="_on_HintButton_pressed"]
