@@ -40,8 +40,6 @@ var filter
 var object
 
 func _ready():
-	
-
 	randomize()
 	
 	object = objects[randi() % objects.size()]
@@ -93,7 +91,6 @@ func _input(event):
 
 func _on_BackButton_pressed():
 	decProgress(Vector2(game_manager.xPos, game_manager.yPos))
-	get_tree().change_scene("res://board_state.tscn")
 
 func _on_SubmitButton_pressed():
 	if ($TextEdit.text.to_lower() == object[1]):
@@ -119,9 +116,7 @@ func inProgress(tileLocV):
 
 	while http.get_status() == HTTPClient.STATUS_CONNECTING or http.get_status() == HTTPClient.STATUS_RESOLVING:
 		http.poll()
-		
-		print("Connecting...")
-		OS.delay_msec(500)
+		yield(get_tree(), "idle_frame")
 	
 	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
 	
@@ -141,7 +136,6 @@ func inProgress(tileLocV):
 	
 	while http.get_status() == HTTPClient.STATUS_REQUESTING:
 		http.poll()
-		print("Requesting PUT...")
 		yield(get_tree(), "idle_frame")
 	
 	print("After inprogress PUT request: " + str(http.get_status()))
@@ -162,7 +156,7 @@ func decProgress(tileLocV):
 		http.poll()
 		
 		print("Connecting...")
-		OS.delay_msec(500)
+		yield(get_tree(), "idle_frame")
 	
 	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
 	
@@ -182,13 +176,13 @@ func decProgress(tileLocV):
 	
 	while http.get_status() == HTTPClient.STATUS_REQUESTING:
 		http.poll()
-		print("Requesting PUT...")
 		yield(get_tree(), "idle_frame")
 	
 	print("After inprogress PUT request: " + str(http.get_status()))
 
 	http.close()
 	$LoadingAnimation.hide()
+	game_manager.changeIntoBoard()
 	
 
 func updateSolved(mouseLocV):
@@ -202,9 +196,8 @@ func updateSolved(mouseLocV):
 	
 	while http.get_status() == HTTPClient.STATUS_CONNECTING or http.get_status() == HTTPClient.STATUS_RESOLVING:
 		http.poll()
-		
 		print("Connecting...")
-		OS.delay_msec(500)
+		yield(get_tree(), "idle_frame")
 	
 	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
 	
@@ -223,7 +216,6 @@ func updateSolved(mouseLocV):
 	
 	while http.get_status() == HTTPClient.STATUS_REQUESTING:
 	    http.poll()
-	    print("Requesting PUT...")
 	    yield(get_tree(), "idle_frame")
 	
 	print("After puzzle_solved PUT request: " + str(http.get_status()))

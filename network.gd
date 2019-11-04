@@ -10,8 +10,7 @@ func inProgress(tileLocV):
 
 	while http.get_status() == HTTPClient.STATUS_CONNECTING or http.get_status() == HTTPClient.STATUS_RESOLVING:
 		http.poll()
-		print("Connecting...")
-		OS.delay_msec(500)
+		yield(get_tree(), "idle_frame")
 	
 	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
 	
@@ -31,7 +30,6 @@ func inProgress(tileLocV):
 	
 	while http.get_status() == HTTPClient.STATUS_REQUESTING:
 		http.poll()
-		print("Requesting PUT...")
 		yield(get_tree(), "idle_frame")
 	
 	print("After inprogress PUT request: " + str(http.get_status()))
@@ -48,8 +46,7 @@ func decProgress(tileLocV):
 
 	while http.get_status() == HTTPClient.STATUS_CONNECTING or http.get_status() == HTTPClient.STATUS_RESOLVING:
 		http.poll()
-		print("Connecting...")
-		OS.delay_msec(500)
+		yield(get_tree(), "idle_frame")
 	
 	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
 	
@@ -69,12 +66,13 @@ func decProgress(tileLocV):
 	
 	while http.get_status() == HTTPClient.STATUS_REQUESTING:
 		http.poll()
-		print("Requesting PUT...")
 		yield(get_tree(), "idle_frame")
 	
 	print("After inprogress PUT request: " + str(http.get_status()))
 
 	http.close()
+
+	
 	
 
 func updateSolved(mouseLocV):
@@ -87,8 +85,7 @@ func updateSolved(mouseLocV):
 	
 	while http.get_status() == HTTPClient.STATUS_CONNECTING or http.get_status() == HTTPClient.STATUS_RESOLVING:
 	    http.poll()
-	    print("Connecting...")
-	    OS.delay_msec(500)
+	    yield(get_tree(), "idle_frame")
 	
 	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
 	
@@ -107,7 +104,6 @@ func updateSolved(mouseLocV):
 	
 	while http.get_status() == HTTPClient.STATUS_REQUESTING:
 	    http.poll()
-	    print("Requesting PUT...")
 	    yield(get_tree(), "idle_frame")
 	
 	print("After puzzle_solved PUT request: " + str(http.get_status()))

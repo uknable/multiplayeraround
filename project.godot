@@ -21,7 +21,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
-network="*res://network.gd"
+network="res://network.gd"
 game_manager="*res://game_manager.gd"
 
 [display]

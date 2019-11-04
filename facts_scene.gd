@@ -1,8 +1,5 @@
 extends Node2D
 
-func _ready():
-	resetBoardState()
-
 func resetBoardState():
 	$HTTPRequest.request("https://sleepy-sands-19230.herokuapp.com/board_state_reset")
 	

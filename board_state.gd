@@ -55,9 +55,14 @@ func _process(delta):
 			var tile = [int(mouseLocV.x), int(mouseLocV.y)-1]
 			var progress = game_manager.ticksSolved[tile] + game_manager.ticksInProgress[tile]
 			
-			if(btm.get_cellv(mouseLocV) == 6 && progress < 3):
-				$LoadingAnimation.show()
-				game_manager.changeIntoPuzzle(mouseLocV)
+			if(btm.get_cellv(mouseLocV) == 6):
+				if(progress < 3):
+					$LoadingAnimation.show()
+					game_manager.changeIntoPuzzle(mouseLocV)
+				else:
+					$Label.text = "That tile has no available slots!"
+			
+
 	
 
 
