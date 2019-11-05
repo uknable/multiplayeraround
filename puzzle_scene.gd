@@ -13,9 +13,9 @@ var object_tree = preload("res://.import/object_tree.png-58844deec650c0cec5a6d05
 var object_bus = preload("res://.import/object_bus.jpg-20a1c2014573cc1968d74f5b796e3a62.stex")
 
 #tool images
-var object_cane = preload("res://.import/object_whitecane.png-5d6755afded56c98c683179c3efbcae6.stex")
-var object_braille = preload("res://.import/object_braille.png-ee80714fd55dd93f208035dbb8122516.stex")
-var object_tactile = preload("res://.import/object_tactilepaving.png-d82c2eb0cef3134a9a5e78294501ea6c.stex")
+var object_cane = preload("res://assets/object_whitecane.png")
+var object_braille = preload("res://assets/object_braille.png")
+var object_tactile = preload("res://assets/object_tactilepaving.png")
 
 var sound_car = load("res://assets/sounds/BMW_driveby.wav")
 var sound_lights = load("res://assets/sounds/trafficlights.wav") 
