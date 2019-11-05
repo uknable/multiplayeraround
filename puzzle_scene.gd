@@ -12,6 +12,11 @@ var object_lights = preload("res://.import/object_lights.png-4936233f92d78830333
 var object_tree = preload("res://.import/object_tree.png-58844deec650c0cec5a6d0500edc4e5b.stex")
 var object_bus = preload("res://.import/object_bus.jpg-20a1c2014573cc1968d74f5b796e3a62.stex")
 
+#tool images
+var object_cane = preload("res://.import/object_whitecane.png-5d6755afded56c98c683179c3efbcae6.stex")
+var object_braille = preload("res://.import/object_braille.png-ee80714fd55dd93f208035dbb8122516.stex")
+var object_tactile = preload("res://.import/object_tactilepaving.png-d82c2eb0cef3134a9a5e78294501ea6c.stex")
+
 var sound_car = load("res://assets/sounds/BMW_driveby.wav")
 var sound_lights = load("res://assets/sounds/trafficlights.wav") 
 var sound_tree = load("res://assets/sounds/tree.wav")
@@ -23,10 +28,13 @@ var filter_glaucoma = preload("res://.import/filter_glaucoma.png-7584f9d8180d8bf
 var filter_retinitis = preload("res://.import/filter_retinitis.png-ea84f1c3fe90cfad200933f86d03aa33.stex")
 
 var objects = [
-	[object_car, "car", sound_car],
-	[object_lights, "traffic lights", sound_lights],
-	[object_tree, "tree", sound_tree],
-	[object_bus, "bus", sound_bus]
+	[object_car, "car", sound_car, "impairments"],
+	[object_lights, "traffic lights", sound_lights, "impairments"],
+	[object_tree, "tree", sound_tree, "impairments"],
+	[object_bus, "bus", sound_bus, "impairments"],
+	[object_cane, "white cane", null, "Helps note upcoming obstacles and the ground surface"],
+	[object_braille, "braille", null, "System to read and write through arrangement of raised dots"],
+	[object_tactile, "tactile paving", null, "Gives warning for change in terrain and traffic stops"]
 ]
 
 var filters = [
@@ -44,11 +52,20 @@ func _ready():
 	
 	object = objects[randi() % objects.size()]
 	$PuzzleTexture.set_texture(object[0])
-	$HintSound.stream = object[2]
+	if (object[2] != null) :
+		$HintSound.stream = object[2]
+	else:
+		$HintButton.hide()
 
-	filter = filters[randi() % filters.size()]
-	$FilterTexture.set_texture(filter[0])
-	$ImpairmentName.text = filter[1]
+	if (object[3] == "impairments"):
+		filter = filters[randi() % filters.size()]
+		$FilterTexture.set_texture(filter[0])
+		$ImpairmentName.text = filter[1]
+	else:
+		$FilterTexture.hide()
+		$ImpairmentName.text = ""
+		$QuestionType.text = "Tools for Impairment"
+		$Question.text = object[3]
 
 	inProgress(Vector2(game_manager.xPos, game_manager.yPos))
 
