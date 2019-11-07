@@ -148,9 +148,9 @@ text = "Tap a Tile"
 
 [node name="Label" type="Label" parent="."]
 margin_left = 28.0
-margin_top = 100.0
+margin_top = 89.0
 margin_right = 260.0
-margin_bottom = 114.0
+margin_bottom = 123.0
 
 [node name="GetBoardState" type="HTTPRequest" parent="."]
 

@@ -14,7 +14,7 @@
 [ext_resource path="res://assets/submit_button.png" type="Texture" id=12]
 [ext_resource path="res://LoadingAnimation.tscn" type="PackedScene" id=13]
 [ext_resource path="res://assets/hint_button.png" type="Texture" id=14]
-[ext_resource path="res://assets/sounds/birds.wav" type="AudioStream" id=15]
+[ext_resource path="res://assets/sounds/bus_stopandgo.wav" type="AudioStream" id=15]
 
 [sub_resource type="TileSet" id=1]
 0/name = "keyboard_sheet_2.png 0"
@@ -451,7 +451,7 @@ margin_right = 281.0
 margin_bottom = 51.0
 texture_normal = ExtResource( 14 )
 
-[node name="HintSound" type="AudioStreamPlayer2D" parent="."]
+[node name="HintSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 15 )
 [connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="focus_entered" from="TextEdit" to="." method="_on_TextEdit_focus_entered"]

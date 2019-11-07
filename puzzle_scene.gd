@@ -17,10 +17,15 @@ var object_cane = preload("res://assets/object_whitecane.png")
 var object_braille = preload("res://assets/object_braille.png")
 var object_tactile = preload("res://assets/object_tactilepaving.png")
 
+#hint sounds
 var sound_car = load("res://assets/sounds/BMW_driveby.wav")
 var sound_lights = load("res://assets/sounds/trafficlights.wav") 
 var sound_tree = load("res://assets/sounds/tree.wav")
 var sound_bus = load("res://assets/sounds/bus_stopandgo.wav")
+
+var sound_cane = load("res://assets/sounds/sound_cane.wav")
+var sound_braille = load("res://assets/sounds/sound_braille.wav")
+var sound_tactile = load("res://assets/sounds/sound_tactile.wav")
 
 var filter_macular = preload("res://.import/filter_macular_degen.png-dca601ebfdb15fde30ee3084c4906d9c.stex")
 var filter_retinopathy = preload("res://.import/filter_retinopathy.png-030e16ad7853741bfac2bb543650402c.stex")
@@ -32,9 +37,9 @@ var objects = [
 	[object_lights, "traffic lights", sound_lights, "impairments"],
 	[object_tree, "tree", sound_tree, "impairments"],
 	[object_bus, "bus", sound_bus, "impairments"],
-	[object_cane, "white cane", null, "Helps note upcoming obstacles and the ground surface"],
-	[object_braille, "braille", null, "System to read and write through arrangement of raised dots"],
-	[object_tactile, "tactile paving", null, "Gives warning for change in terrain and traffic stops"]
+	[object_cane, "white cane", sound_cane, "Helps note upcoming obstacles and the ground surface"],
+	[object_braille, "braille", sound_braille, "System to read and write through arrangement of raised dots"],
+	[object_tactile, "tactile paving", sound_tactile, "Gives warning for change in terrain and traffic stops"]
 ]
 
 var filters = [
@@ -54,6 +59,7 @@ func _ready():
 	$PuzzleTexture.set_texture(object[0])
 	if (object[2] != null) :
 		$HintSound.stream = object[2]
+		$HintButton.show()
 	else:
 		$HintButton.hide()
 
