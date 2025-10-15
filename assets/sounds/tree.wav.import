@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/tree.wav-f4de6a40f67f4cb0c3897004ffad8e94.sample"
+type="AudioStreamWAV"
+uid="uid://d1gfu034nlckr"
+path="res://.godot/imported/tree.wav-f4de6a40f67f4cb0c3897004ffad8e94.sample"
 
 [deps]
 
 source_file="res://assets/sounds/tree.wav"
-dest_files=[ "res://.import/tree.wav-f4de6a40f67f4cb0c3897004ffad8e94.sample" ]
+dest_files=["res://.godot/imported/tree.wav-f4de6a40f67f4cb0c3897004ffad8e94.sample"]
 
 [params]
 
@@ -17,5 +18,7 @@ force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=true
 edit/normalize=true
-edit/loop=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
 compress/mode=0

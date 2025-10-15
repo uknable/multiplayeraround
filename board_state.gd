@@ -3,8 +3,8 @@ extends Node2D
 # add the following to exported index.hbtml
 # <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
 
-onready var btm = $BoardTileMap
-onready var ptm = $ProgressTileMap
+@onready var btm = $BoardTileMap
+@onready var ptm = $ProgressTileMap
 
 var tileCoords = { 
 	[0,0]: 0, 
@@ -35,7 +35,7 @@ func _ready():
 	# Timer calls getBoardState() every 2 seconds
 	_timer = Timer.new()
 	add_child(_timer)
-	_timer.connect("timeout", self, "_on_Timer_timeout")
+	_timer.connect("timeout", Callable(self, "_on_Timer_timeout"))
 	_timer.set_wait_time(TIMER_LENGTH)
 	_timer.set_one_shot(false)
 	_timer.start()
@@ -48,7 +48,7 @@ func _process(delta):
 	if (Input.is_action_just_pressed("ui_click")):
 
 		var mouseLoc = get_global_mouse_position()
-		var mouseLocV = btm.world_to_map(mouseLoc)
+		var mouseLocV = btm.local_to_map(mouseLoc)
 
 		if(mouseLocV.x >= 0 && mouseLocV.x < 2 && mouseLocV.y >= 1 && mouseLocV.y < 4):
 
@@ -72,8 +72,8 @@ func _input(event):
 		return
 	if event.pressed:
 
-		var touchPos = get_canvas_transform().xform_inv(event.position)
-		var touchPosV = btm.world_to_map(touchPos)
+		var touchPos = get_canvas_transform() * event.position
+		var touchPosV = btm.local_to_map(touchPos)
 
 		if(touchPosV.x >= 0 && touchPosV.x < 2 && touchPosV.y >= 1 && touchPosV.y < 4):
 
@@ -92,7 +92,9 @@ func getBoardState():
 	print($GetBoardState.get_http_client_status())
 
 func _on_GetBoardState_request_completed(result, response_code, headers, body):
-	var json = JSON.parse(body.get_string_from_utf8())
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(body.get_string_from_utf8())
+	var json = test_json_conv.get_data()
 	board_state = json.result.get('info')
 
 	$LoadingAnimation.hide()
@@ -161,4 +163,4 @@ func checkIfCompleted(board_state):
 
 	if (tilesFlipStates.min() == 3):
 		print("completed! switching to facts scene")
-		get_tree().change_scene("res://facts_scene.tscn")
+		get_tree().change_scene_to_file("res://facts_scene.tscn")

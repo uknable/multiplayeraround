@@ -1,18 +1,18 @@
 [gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://board_state.gd" type="Script" id=1]
-[ext_resource path="res://assets/board_0.png" type="Texture" id=2]
-[ext_resource path="res://assets/board_1.png" type="Texture" id=3]
-[ext_resource path="res://assets/board_2.png" type="Texture" id=4]
-[ext_resource path="res://assets/board_3.png" type="Texture" id=5]
-[ext_resource path="res://assets/board_4.png" type="Texture" id=6]
-[ext_resource path="res://assets/board_5.png" type="Texture" id=7]
-[ext_resource path="res://assets/black.png" type="Texture" id=8]
-[ext_resource path="res://assets/progress_solved_30.png" type="Texture" id=9]
-[ext_resource path="res://assets/progress_inprogress_30.png" type="Texture" id=10]
-[ext_resource path="res://assets/progress_available_30.png" type="Texture" id=11]
-[ext_resource path="res://assets/Noto_Sans/noto_sans_bold_22.tres" type="DynamicFont" id=12]
-[ext_resource path="res://assets/board_legend.png" type="Texture" id=13]
+[ext_resource path="res://assets/board_0.png" type="Texture2D" id=2]
+[ext_resource path="res://assets/board_1.png" type="Texture2D" id=3]
+[ext_resource path="res://assets/board_2.png" type="Texture2D" id=4]
+[ext_resource path="res://assets/board_3.png" type="Texture2D" id=5]
+[ext_resource path="res://assets/board_4.png" type="Texture2D" id=6]
+[ext_resource path="res://assets/board_5.png" type="Texture2D" id=7]
+[ext_resource path="res://assets/black.png" type="Texture2D" id=8]
+[ext_resource path="res://assets/progress_solved_30.png" type="Texture2D" id=9]
+[ext_resource path="res://assets/progress_inprogress_30.png" type="Texture2D" id=10]
+[ext_resource path="res://assets/progress_available_30.png" type="Texture2D" id=11]
+[ext_resource path="res://assets/Noto_Sans/noto_sans_bold_22.tres" type="FontFile" id=12]
+[ext_resource path="res://assets/board_legend.png" type="Texture2D" id=13]
 [ext_resource path="res://LoadingAnimation.tscn" type="PackedScene" id=14]
 
 [sub_resource type="TileSet" id=1]
@@ -128,37 +128,37 @@ scale = Vector2( 1.129, 1 )
 tile_set = SubResource( 1 )
 cell_size = Vector2( 128, 128 )
 format = 1
-tile_data = PoolIntArray( 65536, 6, 0, 65537, 6, 0, 131072, 6, 0, 131073, 6, 0, 196608, 6, 0, 196609, 6, 0 )
+tile_data = PackedInt32Array( 65536, 6, 0, 65537, 6, 0, 131072, 6, 0, 131073, 6, 0, 196608, 6, 0, 196609, 6, 0 )
 
 [node name="ProgressTileMap" type="TileMap" parent="."]
 tile_set = SubResource( 2 )
 cell_size = Vector2( 30, 8 )
 format = 1
-tile_data = PoolIntArray( 1048577, 2, 0, 1048578, 2, 0, 1048579, 2, 0, 1048582, 2, 0, 1048583, 2, 0, 1048584, 2, 0, 2097153, 2, 0, 2097154, 2, 0, 2097155, 2, 0, 2097158, 2, 0, 2097159, 2, 0, 2097160, 2, 0, 3145729, 2, 0, 3145730, 2, 0, 3145731, 2, 0, 3145734, 2, 0, 3145735, 2, 0, 3145736, 2, 0 )
+tile_data = PackedInt32Array( 1048577, 2, 0, 1048578, 2, 0, 1048579, 2, 0, 1048582, 2, 0, 1048583, 2, 0, 1048584, 2, 0, 2097153, 2, 0, 2097154, 2, 0, 2097155, 2, 0, 2097158, 2, 0, 2097159, 2, 0, 2097160, 2, 0, 3145729, 2, 0, 3145730, 2, 0, 3145731, 2, 0, 3145734, 2, 0, 3145735, 2, 0, 3145736, 2, 0 )
 
 [node name="ChooseATile" type="RichTextLabel" parent="."]
-margin_left = 91.0
-margin_top = 45.0
-margin_right = 224.0
-margin_bottom = 85.0
-custom_fonts/bold_font = ExtResource( 12 )
+offset_left = 91.0
+offset_top = 45.0
+offset_right = 224.0
+offset_bottom = 85.0
+theme_override_fonts/bold_font = ExtResource( 12 )
 bbcode_enabled = true
-bbcode_text = "[b]Tap a Tile[/b]"
+text = "[b]Tap a Tile[/b]"
 text = "Tap a Tile"
 
 [node name="Label" type="Label" parent="."]
-margin_left = 28.0
-margin_top = 89.0
-margin_right = 260.0
-margin_bottom = 123.0
+offset_left = 28.0
+offset_top = 89.0
+offset_right = 260.0
+offset_bottom = 123.0
 
 [node name="GetBoardState" type="HTTPRequest" parent="."]
 
 [node name="BoardLegend" type="TextureRect" parent="."]
-margin_left = 30.0
-margin_top = 542.0
-margin_right = 277.0
-margin_bottom = 571.0
+offset_left = 30.0
+offset_top = 542.0
+offset_right = 277.0
+offset_bottom = 571.0
 texture = ExtResource( 13 )
 expand = true
 

@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/sound_tactile.wav-08c6e0fd512cb78ff7d9bc9ca0d759b0.sample"
+type="AudioStreamWAV"
+uid="uid://breao6vw5mapv"
+path="res://.godot/imported/sound_tactile.wav-08c6e0fd512cb78ff7d9bc9ca0d759b0.sample"
 
 [deps]
 
 source_file="res://assets/sounds/sound_tactile.wav"
-dest_files=[ "res://.import/sound_tactile.wav-08c6e0fd512cb78ff7d9bc9ca0d759b0.sample" ]
+dest_files=["res://.godot/imported/sound_tactile.wav-08c6e0fd512cb78ff7d9bc9ca0d759b0.sample"]
 
 [params]
 
@@ -17,5 +18,7 @@ force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=true
 edit/normalize=true
-edit/loop=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
 compress/mode=0

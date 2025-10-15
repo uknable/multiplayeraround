@@ -25,10 +25,10 @@ func _process(delta):
 
 func changeIntoPuzzle(inputPosition):
 	print("changing into puzzle")
-	get_tree().change_scene("res://puzzle_scene.tscn")
+	get_tree().change_scene_to_file("res://puzzle_scene.tscn")
 	xPos = inputPosition.x
 	yPos = inputPosition.y
 
 func changeIntoBoard():
 	print("changing into board")
-	get_tree().change_scene("res://board_state.tscn")
+	get_tree().change_scene_to_file("res://board_state.tscn")
