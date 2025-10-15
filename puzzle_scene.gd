@@ -7,10 +7,10 @@ const letters = [
 	"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
 ]
 
-var object_car = preload("res://.import/object_car.png-022aa2099fc851e094ad375a17503716.stex")
-var object_lights = preload("res://.import/object_lights.png-4936233f92d788303334be3d3e49151f.stex")
-var object_tree = preload("res://.import/object_tree.png-58844deec650c0cec5a6d0500edc4e5b.stex")
-var object_bus = preload("res://.import/object_bus.jpg-20a1c2014573cc1968d74f5b796e3a62.stex")
+var object_car = preload("res://assets/object_bus.jpg")
+var object_lights = preload("res://assets/object_lights.png")
+var object_tree = preload("res://assets/object_tree.png")
+var object_bus = preload("res://assets/object_bus.jpg")
 
 #tool images
 var object_cane = preload("res://assets/object_whitecane.png")
@@ -27,10 +27,10 @@ var sound_cane = load("res://assets/sounds/sound_cane.wav")
 var sound_braille = load("res://assets/sounds/sound_braille.wav")
 var sound_tactile = load("res://assets/sounds/sound_tactile.wav")
 
-var filter_macular = preload("res://.import/filter_macular_degen.png-dca601ebfdb15fde30ee3084c4906d9c.stex")
-var filter_retinopathy = preload("res://.import/filter_retinopathy.png-030e16ad7853741bfac2bb543650402c.stex")
-var filter_glaucoma = preload("res://.import/filter_glaucoma.png-7584f9d8180d8bf9face0b72050f5f97.stex")
-var filter_retinitis = preload("res://.import/filter_retinitis.png-ea84f1c3fe90cfad200933f86d03aa33.stex")
+var filter_macular = preload("res://assets/filter_macular_degen.png")
+var filter_retinopathy = preload("res://assets/filter_retinopathy.png")
+var filter_glaucoma = preload("res://assets/filter_glaucoma.png")
+var filter_retinitis = preload("res://assets/filter_retinitis.png")
 
 var objects = [
 	[object_car, "car", sound_car, "impairments"],
@@ -98,7 +98,7 @@ func _input(event):
 	if not event is InputEventScreenTouch:
 		return
 	if event.pressed:
-		var touchPos = get_canvas_transform()(event.position) * 
+		var touchPos = get_canvas_transform() * event.position
 		var touchPosV = tm.local_to_map(touchPos)
 		print(touchPosV, tm.get_cellv(touchPosV))
 		var cellv = tm.get_cellv(touchPosV)
@@ -134,12 +134,12 @@ func inProgress(tileLocV):
 	var yPos = tileLocV.y - 1
 
 	var http = HTTPClient.new()
-	var err = http.connect_to_host("sleepy-sands-19230.herokuapp.com")
+	var err = http.connect_to_host("visibility-node.onrender.com")
 	assert(err == OK)
 
-	while http.get_status() == HTTPClient.STATUS_CONNECTING or http.get_status() == HTTPClient.STATUS_RESOLVING:
+	while http.status == HTTPClient.STATUS_CONNECTING or http.status == HTTPClient.STATUS_RESOLVING:
 		http.poll()
-		await get_tree().idle_frame
+		await get_tree().process_frame
 	
 	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
 	
@@ -157,9 +157,9 @@ func inProgress(tileLocV):
 		queryString
 	)
 	
-	while http.get_status() == HTTPClient.STATUS_REQUESTING:
+	while http.status == HTTPClient.STATUS_REQUESTING:
 		http.poll()
-		await get_tree().idle_frame
+		await get_tree().process_frame
 	
 	print("After inprogress PUT request: " + str(http.get_status()))
 
@@ -172,14 +172,14 @@ func decProgress(tileLocV):
 	var yPos = tileLocV.y - 1
 
 	var http = HTTPClient.new()
-	var err = http.connect_to_host("sleepy-sands-19230.herokuapp.com")
+	var err = http.connect_to_host("visibility-node.onrender.com")
 	assert(err == OK)
 
-	while http.get_status() == HTTPClient.STATUS_CONNECTING or http.get_status() == HTTPClient.STATUS_RESOLVING:
+	while http.status == HTTPClient.STATUS_CONNECTING or http.status == HTTPClient.STATUS_RESOLVING:
 		http.poll()
-		
+        
 		print("Connecting...")
-		await get_tree().idle_frame
+		await get_tree().process_frame
 	
 	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
 	
@@ -197,9 +197,9 @@ func decProgress(tileLocV):
 		queryString
 	)
 	
-	while http.get_status() == HTTPClient.STATUS_REQUESTING:
+	while http.status == HTTPClient.STATUS_REQUESTING:
 		http.poll()
-		await get_tree().idle_frame
+		await get_tree().process_frame
 	
 	print("After inprogress PUT request: " + str(http.get_status()))
 
@@ -214,13 +214,13 @@ func updateSolved(mouseLocV):
 	var yPos = mouseLocV.y - 1
 	
 	var http = HTTPClient.new()
-	var err = http.connect_to_host("sleepy-sands-19230.herokuapp.com")
+	var err = http.connect_to_host("visibility-node.onrender.com")
 	assert(err == OK)
 	
-	while http.get_status() == HTTPClient.STATUS_CONNECTING or http.get_status() == HTTPClient.STATUS_RESOLVING:
+	while http.status == HTTPClient.STATUS_CONNECTING or http.status == HTTPClient.STATUS_RESOLVING:
 		http.poll()
 		print("Connecting...")
-		await get_tree().idle_frame
+		await get_tree().process_frame
 	
 	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
 	
@@ -237,14 +237,14 @@ func updateSolved(mouseLocV):
 	    queryString
 	)
 	
-	while http.get_status() == HTTPClient.STATUS_REQUESTING:
-	    http.poll()
-	    await get_tree().idle_frame
+	while http.status == HTTPClient.STATUS_REQUESTING:
+		http.poll()
+		await get_tree().process_frame
 	
-	print("After puzzle_solved PUT request: " + str(http.get_status()))
+	print("After puzzle_solved PUT request: " + str(http.status))
 
 	http.close()
-	print("After close: " + str(http.get_status()))
+	print("After close: " + str(http.status))
 	$LoadingAnimation.hide()
 
 func _on_HintButton_pressed():

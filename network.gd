@@ -5,12 +5,12 @@ func inProgress(tileLocV):
 	var yPos = tileLocV.y - 1
 
 	var http = HTTPClient.new()
-	var err = http.connect_to_host("sleepy-sands-19230.herokuapp.com")
+	var err = http.connect_to_host("visibility-node.onrender.com")
 	assert(err == OK)
 
-	while http.get_status() == HTTPClient.STATUS_CONNECTING or http.get_status() == HTTPClient.STATUS_RESOLVING:
+	while http.status == HTTPClient.STATUS_CONNECTING or http.status == HTTPClient.STATUS_RESOLVING:
 		http.poll()
-		await get_tree().idle_frame
+		await get_tree().process_frame
 	
 	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
 	
@@ -28,9 +28,9 @@ func inProgress(tileLocV):
 		queryString
 	)
 	
-	while http.get_status() == HTTPClient.STATUS_REQUESTING:
+	while http.status == HTTPClient.STATUS_REQUESTING:
 		http.poll()
-		await get_tree().idle_frame
+		await get_tree().process_frame
 	
 	print("After inprogress PUT request: " + str(http.get_status()))
 
@@ -41,12 +41,12 @@ func decProgress(tileLocV):
 	var yPos = tileLocV.y - 1
 
 	var http = HTTPClient.new()
-	var err = http.connect_to_host("sleepy-sands-19230.herokuapp.com")
+	var err = http.connect_to_host("visibility-node.onrender.com")
 	assert(err == OK)
 
-	while http.get_status() == HTTPClient.STATUS_CONNECTING or http.get_status() == HTTPClient.STATUS_RESOLVING:
+	while http.status == HTTPClient.STATUS_CONNECTING or http.status == HTTPClient.STATUS_RESOLVING:
 		http.poll()
-		await get_tree().idle_frame
+		await get_tree().process_frame
 	
 	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
 	
@@ -64,9 +64,9 @@ func decProgress(tileLocV):
 		queryString
 	)
 	
-	while http.get_status() == HTTPClient.STATUS_REQUESTING:
+	while http.status == HTTPClient.STATUS_REQUESTING:
 		http.poll()
-		await get_tree().idle_frame
+		await get_tree().process_frame
 	
 	print("After inprogress PUT request: " + str(http.get_status()))
 
@@ -80,12 +80,12 @@ func updateSolved(mouseLocV):
 	var yPos = mouseLocV.y - 1
 	
 	var http = HTTPClient.new()
-	var err = http.connect_to_host("sleepy-sands-19230.herokuapp.com")
+	var err = http.connect_to_host("visibility-node.onrender.com")
 	assert(err == OK)
 	
-	while http.get_status() == HTTPClient.STATUS_CONNECTING or http.get_status() == HTTPClient.STATUS_RESOLVING:
-	    http.poll()
-	    await get_tree().idle_frame
+	while http.status == HTTPClient.STATUS_CONNECTING or http.status == HTTPClient.STATUS_RESOLVING:
+		http.poll()
+		await get_tree().process_frame
 	
 	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
 	
@@ -102,12 +102,12 @@ func updateSolved(mouseLocV):
 	    queryString
 	)
 	
-	while http.get_status() == HTTPClient.STATUS_REQUESTING:
-	    http.poll()
-	    await get_tree().idle_frame
+	while http.status == HTTPClient.STATUS_REQUESTING:
+		http.poll()
+		await get_tree().process_frame
 	
 	print("After puzzle_solved PUT request: " + str(http.get_status()))
 
 	http.close()
-	print("After close: " + str(http.get_status()))
+	print("After close: " + str(http.status))
 

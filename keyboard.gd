@@ -22,6 +22,6 @@ func _input(event):
 	if not event is InputEventScreenTouch:
 		return
 	if event.pressed:
-		var touchPos = get_canvas_transform()(event.position) * 
+		var touchPos = get_canvas_transform() * event.position 
 		var touchPosV = tm.local_to_map(touchPos)
 		print(touchPosV, tm.get_cellv(touchPosV))

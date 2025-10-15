@@ -88,8 +88,8 @@ func _on_Timer_timeout():
 	getBoardState()
 
 func getBoardState():
-	$GetBoardState.request("https://sleepy-sands-19230.herokuapp.com/board_state")
-	print($GetBoardState.get_http_client_status())
+	$GetBoardState.request("https://visibility-node.onrender.com/board_state")
+	print("getBoardState(): ", $GetBoardState.get_http_client_status())
 
 func _on_GetBoardState_request_completed(result, response_code, headers, body):
 	var test_json_conv = JSON.new()
